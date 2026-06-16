@@ -1,0 +1,436 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- ============ SCREEN NAV ============ -->
+<!-- <div class="screen-nav">
+  <button class="active" onclick="showScreen('landing')">🏠 Landing</button>
+  <button onclick="showScreen('login')">🔐 Login</button>
+  <button onclick="showScreen('register')">📝 Register</button>
+  <button onclick="showScreen('dashboard')">📊 Dashboard</button>
+  <button onclick="showScreen('vehicles')">🚗 Vehicles</button>
+  <button onclick="showScreen('add-vehicle')">➕ Add Vehicle</button>
+  <button onclick="showScreen('qr-management')">📱 QR Mgmt</button>
+  <button onclick="showScreen('scan-history')">📋 Scans</button>
+  <button onclick="showScreen('notifications')">🔔 Notifs</button>
+  <button onclick="showScreen('privacy')">🔒 Privacy</button>
+  <button onclick="showScreen('profile')">👤 Profile</button>
+  <button onclick="showScreen('society-admin')">🏘️ Society</button>
+  <button onclick="showScreen('super-admin')">⚡ Super Admin</button>
+</div> -->
+
+<!-- ============================================================ -->
+<!-- SCREEN 1: LANDING PAGE -->
+<!-- ============================================================ -->
+<div id="screen-landing" class="screen active">
+  <!-- NAVBAR -->
+  <nav class="lp-nav" id="lp-nav">
+    <div class="container">
+      <div class="lp-nav-inner">
+        <a href="#" class="logo">
+          <div class="logo-icon">🅿️</div>
+          <span class="logo-text">Safe<span>Park</span></span>
+        </a>
+        <div class="nav-links">
+          <a href="#">Features</a>
+          <a href="#">How It Works</a>
+          <a href="#">Pricing</a>
+          <a href="#">About</a>
+          <a href="#">Blog</a>
+        </div>
+        <div class="nav-cta">
+         <a href="{% url 'login' %}"> <button class="btn btn-ghost btn-sm" >Log In</button></a>
+         <a href="{% url 'register' %}"> <button class="btn btn-primary btn-sm">Get Started →</button></a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+       <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-inner">
+        <div class="fade-in-up">
+          <div class="hero-badge">
+            <div class="hero-badge-dot">✨</div>
+            Smart QR Vehicle Identity Platform
+          </div>
+          <h1>Connect Vehicle Owners Securely Through <span class="gradient-text">Smart QR Technology</span></h1>
+          <p>SafePark enables instant, privacy-protected communication between vehicle owners and anyone who needs to reach them — no phone number exposure, ever.</p>
+          <div class="hero-cta">
+               <a href="{% url 'register' %}"> <button class="btn btn-primary btn-sm">Get Started →</button></a>
+            <button class="btn btn-secondary">▶ Watch Demo</button>
+          </div>
+          <div class="hero-stats">
+            <div>
+              <div class="hero-stat-num">50K+</div>
+              <div class="hero-stat-label">Vehicles Registered</div>
+            </div>
+            <div>
+              <div class="hero-stat-num">200+</div>
+              <div class="hero-stat-label">Societies Onboarded</div>
+            </div>
+            <div>
+              <div class="hero-stat-num">1M+</div>
+              <div class="hero-stat-label">QR Scans Served</div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-visual fade-in-up delay-2">
+          <div class="float-anim">
+            <div class="hero-card-main">
+              <div class="hero-qr-area">
+                <div class="hero-qr-corners"></div>
+                <span style="font-size:80px;z-index:1;position:relative;">▦</span>
+              </div>
+              <div class="hero-card-info">
+                <div class="hero-card-plate">MH 02 AB 1234</div>
+                <div class="hero-card-name">Rahul Sharma</div>
+                <div class="hero-card-sub">Toyota Fortuner · Silver · B-204</div>
+                <div style="margin-top:16px;display:flex;gap:8px;justify-content:center;">
+                  <span class="badge badge-green">✓ Verified Owner</span>
+                  <span class="badge badge-blue">🔒 Privacy Protected</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="floating-badge float-1 fade-in-up delay-3">
+            <div class="float-icon">📱</div>
+            <div class="float-text">QR Scanned!</div>
+            <div class="float-sub">Owner Notified Instantly</div>
+          </div>
+          <div class="floating-badge float-2 fade-in-up delay-3">
+            <div class="float-icon">🔔</div>
+            <div class="float-text">Contact Request</div>
+            <div class="float-sub">Sent Anonymously</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">⚡ Features</div>
+        <h2 class="section-title">Everything You Need for<br/>Smart Vehicle Management</h2>
+        <p class="section-sub">From QR generation to real-time notifications, SafePark gives you complete control over your vehicle's digital identity.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon fi-blue">🔐</div>
+          <div class="feature-title">Privacy-First Design</div>
+          <div class="feature-desc">Your mobile number and personal details stay completely hidden. All communications are routed through our secure system.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon fi-indigo">📱</div>
+          <div class="feature-title">Instant QR Generation</div>
+          <div class="feature-desc">Generate unique, high-quality QR codes for each vehicle in seconds. Download, print, or share as stickers effortlessly.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon fi-emerald">🔔</div>
+          <div class="feature-title">Real-Time Alerts</div>
+          <div class="feature-desc">Receive instant push notifications whenever your QR code is scanned. Know who's trying to reach you and why.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon fi-orange">🏘️</div>
+          <div class="feature-title">Society Integration</div>
+          <div class="feature-desc">Built-in tools for housing societies and gated communities. Manage residents, vehicles, and access all in one place.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon fi-purple">📊</div>
+          <div class="feature-title">Scan Analytics</div>
+          <div class="feature-desc">Track every scan with detailed history — time, location context, scanner details, and contact reason.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon fi-red">🚨</div>
+          <div class="feature-title">Emergency Mode</div>
+          <div class="feature-desc">One-tap emergency alerts visible to scanners. Critical information shared instantly when every second counts.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section hiw-bg">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">🗺️ Process</div>
+        <h2 class="section-title">How SafePark Works</h2>
+        <p class="section-sub">Get your vehicle connected in under 5 minutes. Our intuitive flow makes it simple for everyone.</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card fade-in-up">
+          <div class="step-num">📝</div>
+          <h3>Register & Verify</h3>
+          <p>Create your account with basic details. Verify your identity and get approved instantly.</p>
+        </div>
+        <div class="step-card fade-in-up delay-1">
+          <div class="step-num">🚗</div>
+          <h3>Add Your Vehicle</h3>
+          <p>Enter your vehicle details — plate number, brand, model, and color. Upload a photo for verification.</p>
+        </div>
+        <div class="step-card fade-in-up delay-2">
+          <div class="step-num">📱</div>
+          <h3>Generate QR Code</h3>
+          <p>Get a unique QR sticker for your vehicle. Download, print, and stick it on your windshield.</p>
+        </div>
+        <div class="step-card fade-in-up delay-3">
+          <div class="step-num">🔔</div>
+          <h3>Stay Connected</h3>
+          <p>Anyone who scans your code can send a message. You get notified instantly — no number shared.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QR WORKFLOW -->
+  <section class="section" style="background: linear-gradient(135deg, #f0f4ff, #f8fafc);">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">📱 QR Workflow</div>
+        <h2 class="section-title">Seamless Scan Experience</h2>
+        <p class="section-sub">When someone scans your QR, they see a clean contact page — no personal info exposed.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:24px;max-width:900px;margin:0 auto;">
+        <div class="card" style="padding:28px;text-align:center;">
+          <div style="font-size:48px;margin-bottom:16px;">📷</div>
+          <h3 style="font-size:15px;font-weight:700;margin-bottom:8px;">1. Scan QR Code</h3>
+          <p style="font-size:13px;color:var(--text-secondary);">Scanner uses any camera app to scan the sticker on the vehicle</p>
+        </div>
+        <div class="card" style="padding:28px;text-align:center;">
+          <div style="font-size:48px;margin-bottom:16px;">📋</div>
+          <h3 style="font-size:15px;font-weight:700;margin-bottom:8px;">2. View Contact Page</h3>
+          <p style="font-size:13px;color:var(--text-secondary);">A secure page shows vehicle info and contact options — owner details hidden</p>
+        </div>
+        <div class="card" style="padding:28px;text-align:center;">
+          <div style="font-size:48px;margin-bottom:16px;">✉️</div>
+          <h3 style="font-size:15px;font-weight:700;margin-bottom:8px;">3. Owner Gets Alert</h3>
+          <p style="font-size:13px;color:var(--text-secondary);">Owner receives an instant notification with scanner's intent and details</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <!-- <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">💰 Pricing</div>
+        <h2 class="section-title">Simple, Transparent Pricing</h2>
+        <p class="section-sub">Start free, scale as you grow. No hidden fees, no surprises.</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="pricing-plan">Starter</div>
+          <div class="pricing-price">₹0</div>
+          <div class="pricing-period">Forever free · Up to 2 vehicles</div>
+          <ul class="pricing-features">
+            <li><span class="check">✓</span> 2 Vehicle Registrations</li>
+            <li><span class="check">✓</span> QR Code Generation</li>
+            <li><span class="check">✓</span> Basic Scan Notifications</li>
+            <li><span class="check">✓</span> Scan History (30 days)</li>
+            <li style="color:var(--text-muted)">✗ Privacy Controls</li>
+            <li style="color:var(--text-muted)">✗ Emergency Mode</li>
+          </ul>
+          <button class="btn btn-secondary" style="width:100%">Get Started Free</button>
+        </div>
+        <div class="pricing-card featured">
+          <div class="pricing-badge-top">Most Popular</div>
+          <div class="pricing-plan">Professional</div>
+          <div class="pricing-price">₹299</div>
+          <div class="pricing-period">per month · Up to 5 vehicles</div>
+          <ul class="pricing-features">
+            <li><span class="check">✓</span> 5 Vehicle Registrations</li>
+            <li><span class="check">✓</span> Premium QR Stickers</li>
+            <li><span class="check">✓</span> Real-Time Notifications</li>
+            <li><span class="check">✓</span> Full Scan History</li>
+            <li><span class="check">✓</span> Advanced Privacy Controls</li>
+            <li><span class="check">✓</span> Emergency Mode</li>
+          </ul>
+          <button class="btn btn-primary" style="width:100%">Start Pro Trial →</button>
+        </div>
+        <div class="pricing-card">
+          <div class="pricing-plan">Society</div>
+          <div class="pricing-price">₹999</div>
+          <div class="pricing-period">per month · Unlimited vehicles</div>
+          <ul class="pricing-features">
+            <li><span class="check">✓</span> Unlimited Vehicles</li>
+            <li><span class="check">✓</span> Society Admin Dashboard</li>
+            <li><span class="check">✓</span> Resident Management</li>
+            <li><span class="check">✓</span> Bulk QR Generation</li>
+            <li><span class="check">✓</span> White-label Option</li>
+            <li><span class="check">✓</span> Priority Support</li>
+          </ul>
+          <button class="btn btn-secondary" style="width:100%">Contact Sales</button>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+  <!-- TESTIMONIALS -->
+  <section class="section testimonials-bg">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">⭐ Testimonials</div>
+        <h2 class="section-title">Loved by Vehicle Owners</h2>
+        <p class="section-sub">Thousands of satisfied users trust SafePark to protect their privacy while staying connected.</p>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <div class="testimonial-text">"Amazing product! Someone tried to contact me about my car blocking their gate. Got notified instantly without anyone knowing my number. Genius!"</div>
+          <div class="testimonial-author">
+            <div class="author-avatar av-blue">RS</div>
+            <div>
+              <div class="author-name">Rahul Sharma</div>
+              <div class="author-role">Software Engineer, Mumbai</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <div class="testimonial-text">"As a society manager, SafePark transformed how we handle parking complaints. The admin dashboard is incredibly powerful and easy to use."</div>
+          <div class="testimonial-author">
+            <div class="author-avatar av-indigo">PK</div>
+            <div>
+              <div class="author-name">Priya Krishnan</div>
+              <div class="author-role">Society Manager, Pune</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <div class="testimonial-text">"My car was scratched in a mall parking lot. The person scanned my QR and contacted me through SafePark. Got compensated! Totally worth it."</div>
+          <div class="testimonial-author">
+            <div class="author-avatar av-emerald">AJ</div>
+            <div>
+              <div class="author-name">Amit Joshi</div>
+              <div class="author-role">Business Owner, Bangalore</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">❓ FAQ</div>
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-sub">Everything you need to know about SafePark.</p>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item open">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            Is my phone number visible to people who scan my QR?
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">Absolutely not. SafePark is built with privacy at its core. Your mobile number, email address, and home address are never exposed. The scanner only sees what you explicitly choose to share in your Privacy Settings.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            How do I get my QR code on a sticker?
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">After generating your QR code, you can download it as a high-resolution PDF. We also offer printed weatherproof stickers delivered to your doorstep for Pro and Society plan users.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            What happens if someone scans my QR and wants to contact me?
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">They can send you a message through SafePark's secure messaging system. You'll receive a push notification with their message and can choose to respond — all without revealing your personal contact details.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            Can I register multiple vehicles?
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">Yes! The Starter plan supports up to 2 vehicles. The Professional plan supports up to 5, and the Society plan has no limits. You get a unique QR code for each registered vehicle.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            Is SafePark compatible with all vehicles?
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">SafePark works with any vehicle — cars, motorcycles, trucks, electric vehicles, and more. As long as you have a registration number, you can register it on SafePark.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-logo">
+            <a href="#" class="logo">
+              <div class="logo-icon">🅿️</div>
+              <span class="logo-text" style="color:white;">Safe<span>Park</span></span>
+            </a>
+          </div>
+          <p class="footer-desc">Smart QR-based vehicle contact system for a safer, more connected world. Privacy-first, always.</p>
+          <div class="footer-social">
+            <div class="social-btn">𝕏</div>
+            <div class="social-btn">in</div>
+            <div class="social-btn">📘</div>
+            <div class="social-btn">📸</div>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="#">Features</a>
+          <a href="#">How It Works</a>
+          <a href="#">Pricing</a>
+          <a href="#">Changelog</a>
+          <a href="#">Roadmap</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#">About Us</a>
+          <a href="#">Blog</a>
+          <a href="#">Careers</a>
+          <a href="#">Press Kit</a>
+          <a href="#">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Cookie Policy</a>
+          <a href="#">GDPR</a>
+          <a href="#">Security</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>© 2025 SafePark Technologies Pvt. Ltd. All rights reserved.</div>
+        <div>Made with ❤️ in India 🇮🇳</div>
+      </div>
+    </div>
+  </footer>
+ 
+
+<!-- ============================================================ -->
+<!-- SCREEN 2: LOGIN PAGE -->
+<!-- ============================================================ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="{% static 'js/script.js' %}"></script>
+  
+{% endblock %}

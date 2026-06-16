@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- ============================================================ -->
+<!-- SCREEN 9: NOTIFICATIONS -->
+<!-- ============================================================ -->
+<div id="screen-notifications" class="screen active">
+  <div class="dashboard-layout">
+    <div class="sidebar">
+      <div class="sidebar-logo"><div class="logo"><div class="logo-icon">🅿️</div><span class="logo-text" style="color:white;">Safe<span>Park</span></span></div></div>
+        <nav class="sidebar-nav">
+        <div class="nav-section-label">Main</div>
+       <a href="{% url 'dashboard' %}" style="text-decoration: none;" > <button class="nav-item active"><span class="nav-icon">📊</span> Dashboard</button></a>
+       <a href="/vehicle" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">🚗</span> My Vehicles</button></a>
+       <a href="{% url 'qr_create' %}" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">📱</span> Generate QR</button></a>
+       <a href="{% url 'scan_history'%}" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">📋</span> Scan History</button></a>
+        <div class="nav-section-label">Account</div>
+       <a href="{% url 'notification' %}" style="text-decoration: none;"><button class="nav-item"><span class="nav-icon">🔔</span> Notifications <span class="nav-badge">{{ notification_count }}</span></button></a>
+        
+        <a href="/profile" style="text-decoration: none;"><button class="nav-item"><span class="nav-icon">👤</span> Profile</button></a>
+        <div class="nav-section-label">System</div>
+       
+      <a href="{% url 'logout' %}" style="text-decoration: none;"><button class="nav-item" ><span class="nav-icon">🚪</span> Logout</button></a>
+      </nav>
+        <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar">🅿️</div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name">{{ request.user.first_name }}</div>
+            <!-- <div class="sidebar-user-role">Pro Plan · 4 vehicles</div> -->
+          </div>
+          <span style="color:rgba(255,255,255,0.3);font-size:14px;">⚙</span>
+        </div>
+      </div>
+    </div>
+    <div class="main-content">
+      <div class="topbar">
+        <div class="topbar-left"><div class="topbar-breadcrumb"><span style="color:var(--text-muted)">SafePark</span><span class="breadcrumb-sep">/</span><span class="breadcrumb-current">Notifications</span></div></div>
+      
+        <a href="{% url 'mark_all_read'%}"><div class="topbar-right"><button class="btn btn-ghost btn-sm">Mark all read</button></div></a>
+     
+      </div>
+      <div class="page-content">
+        <div class="page-header">
+          <div style="display:flex;justify-content:space-between;align-items:center;" id="head-notification">
+            <div><h1 class="page-title">Notifications</h1></div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-secondary btn-sm">All</button>
+      
+            </div>
+          </div>
+        </div>
+        <div style="font-size:13px;font-weight:700;color:var(--text-muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px;">Today</div>
+        {% for notification in notifications %}
+        <div class="notif-card unread">
+          <div class="notif-icon ni-blue">
+            {% if notification.notification_type == "scan" %}
+               📱
+               {% elif notification.notification_type == "add" %}
+               🚗
+               {% elif notification.notification_type == "delete" %}
+               🗑
+               {% endif %}
+          
+          </div>
+          <div class="notif-content">
+            <div class="notif-title">{{ notification.title }}</div>
+            <div class="notif-desc">{{ notification.message }}</div>
+            <div class="notif-time">{{ notification.created_at }}</div>
+            <div class="notif-actions">
+                {% if notification.notification_type == "scan" %}
+               <a href="{% url 'scan_history' %}"><button class="btn btn-secondary btn-sm">View Details</button></a>
+               {% elif notification.notification_type == "add" %}
+               <a href="{% url 'my_vehicle' %}"><button class="btn btn-secondary btn-sm">View Details</button></a>
+               {% elif notification.notification_type == "delete" %}
+               <a href="{% url 'my_vehicle' %}"><button class="btn btn-secondary btn-sm">View Details</button></a>
+             
+               {% endif %}
+            
+              <a href="{% url 'dismiss_notification' notification.id %}"><button class="btn btn-ghost btn-sm">Dismiss</button></a>
+               
+            </div>
+          </div>
+          <span class="badge badge-blue">New</span>
+        </div>
+        {% endfor %}
+    
+      </div>
+    </div>
+  </div>
+</div>
+    
+{% endblock %}

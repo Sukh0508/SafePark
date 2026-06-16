@@ -1,0 +1,168 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SafePark – Smart Vehicle QR Contact System</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+<body>
+    
+<!-- ============================================================ -->
+<!-- SCREEN 13: SUPER ADMIN DASHBOARD -->
+<!-- ============================================================ -->
+<div id="screen-super-admin" class="screen">
+  <div class="dashboard-layout">
+    <div class="sidebar">
+      <div class="sidebar-logo"><div class="logo"><div class="logo-icon">🅿️</div><span class="logo-text" style="color:white;">Safe<span>Park</span></span></div></div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Super Admin</div>
+        <button class="nav-item active"><span class="nav-icon">⚡</span> Overview</button>
+        <button class="nav-item"><span class="nav-icon">👥</span> User Management</button>
+        <button class="nav-item"><span class="nav-icon">🚗</span> All Vehicles</button>
+        <button class="nav-item"><span class="nav-icon">🏘️</span> Societies</button>
+        <button class="nav-item"><span class="nav-icon">💰</span> Revenue</button>
+        <button class="nav-item"><span class="nav-icon">📊</span> Analytics</button>
+        <button class="nav-item"><span class="nav-icon">📱</span> QR Analytics</button>
+        <button class="nav-item"><span class="nav-icon">⚙️</span> System Settings</button>
+        <button class="nav-item" onclick="showScreen('landing')"><span class="nav-icon">🚪</span> Logout</button>
+      </nav>
+      <div class="sidebar-footer"><div class="sidebar-user"><div class="sidebar-avatar" style="background:linear-gradient(135deg,#dc2626,#b91c1c);">SA</div><div class="sidebar-user-info"><div class="sidebar-user-name">Super Admin</div><div class="sidebar-user-role">Platform Administrator</div></div></div></div>
+    </div>
+    <div class="main-content">
+      <div class="topbar">
+        <div class="topbar-left"><div class="topbar-breadcrumb"><span style="color:var(--text-muted)">SafePark</span><span class="breadcrumb-sep">/</span><span class="breadcrumb-current">Super Admin · Platform Overview</span></div></div>
+        <div class="topbar-right"><div class="icon-btn">🔔</div><div class="icon-btn" style="background:linear-gradient(135deg,#dc2626,#b91c1c);color:white;font-weight:bold;">SA</div></div>
+      </div>
+      <div class="page-content">
+        <div class="admin-header-card">
+          <h2>Platform Overview ⚡</h2>
+          <p>Real-time metrics across all users, vehicles, and societies · Last updated: Just now</p>
+          <div style="display:flex;gap:10px;margin-top:16px;">
+            <span class="badge" style="background:rgba(255,255,255,0.15);color:white;">🟢 System Operational</span>
+            <span class="badge" style="background:rgba(255,255,255,0.15);color:white;">99.98% Uptime</span>
+            <span class="badge" style="background:rgba(255,255,255,0.15);color:white;">Dec 2025</span>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-header"><div class="stat-icon fi-blue">👥</div><span class="stat-change stat-up">↑ +234</span></div>
+            <div class="stat-value">52,841</div>
+            <div class="stat-label">Total Users</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header"><div class="stat-icon fi-indigo">🚗</div><span class="stat-change stat-up">↑ +487</span></div>
+            <div class="stat-value">1,28,340</div>
+            <div class="stat-label">Total Vehicles</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header"><div class="stat-icon fi-emerald">📊</div><span class="stat-change stat-up">↑ +12%</span></div>
+            <div class="stat-value">4.2M</div>
+            <div class="stat-label">Total QR Scans</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header"><div class="stat-icon fi-orange">💰</div><span class="stat-change stat-up">↑ +24%</span></div>
+            <div class="stat-value">₹18.4L</div>
+            <div class="stat-label">MRR</div>
+          </div>
+        </div>
+
+        <div class="stats-grid-3">
+          <div class="stat-card">
+            <div class="stat-header"><div class="stat-icon fi-purple">🏘️</div><span class="stat-change stat-up">+12</span></div>
+            <div class="stat-value">248</div>
+            <div class="stat-label">Societies Onboarded</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header"><div class="stat-icon fi-blue">📱</div><span class="stat-change stat-up">↑ +8%</span></div>
+            <div class="stat-value">98.4%</div>
+            <div class="stat-label">QR Activation Rate</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header"><div class="stat-icon fi-emerald">⭐</div></div>
+            <div class="stat-value">4.8/5</div>
+            <div class="stat-label">Avg. User Rating</div>
+          </div>
+        </div>
+
+        <div class="admin-content-grid">
+          <div class="chart-card">
+            <div class="chart-title">Revenue Analytics</div>
+            <div class="chart-sub">Monthly Revenue (₹ Lakhs) — 2025</div>
+            <div class="bar-chart" style="height:140px;">
+              <div class="bar-col"><div class="bar" style="height:40%;background:var(--gradient-blue);"></div><div class="bar-label">Jan</div></div>
+              <div class="bar-col"><div class="bar" style="height:52%;background:var(--gradient-blue);"></div><div class="bar-label">Feb</div></div>
+              <div class="bar-col"><div class="bar" style="height:60%;background:var(--gradient-blue);"></div><div class="bar-label">Mar</div></div>
+              <div class="bar-col"><div class="bar" style="height:68%;background:var(--gradient-blue);"></div><div class="bar-label">Apr</div></div>
+              <div class="bar-col"><div class="bar" style="height:72%;background:var(--gradient-blue);"></div><div class="bar-label">May</div></div>
+              <div class="bar-col"><div class="bar" style="height:78%;background:var(--gradient-blue);"></div><div class="bar-label">Jun</div></div>
+              <div class="bar-col"><div class="bar" style="height:75%;background:var(--gradient-blue);"></div><div class="bar-label">Jul</div></div>
+              <div class="bar-col"><div class="bar" style="height:82%;background:var(--gradient-blue);"></div><div class="bar-label">Aug</div></div>
+              <div class="bar-col"><div class="bar" style="height:88%;background:var(--gradient-blue);"></div><div class="bar-label">Sep</div></div>
+              <div class="bar-col"><div class="bar" style="height:92%;background:var(--gradient-blue);"></div><div class="bar-label">Oct</div></div>
+              <div class="bar-col"><div class="bar" style="height:95%;background:var(--gradient-blue);"></div><div class="bar-label">Nov</div></div>
+              <div class="bar-col"><div class="bar" style="height:100%;background:linear-gradient(135deg,#10b981,#059669);"></div><div class="bar-label">Dec</div></div>
+            </div>
+            <div style="display:flex;gap:24px;margin-top:16px;padding-top:16px;border-top:1px solid var(--border);">
+              <div><div style="font-size:20px;font-weight:800;color:var(--navy);">₹18.4L</div><div style="font-size:11px;color:var(--text-muted);">This Month</div></div>
+              <div><div style="font-size:20px;font-weight:800;color:var(--emerald);">+24%</div><div style="font-size:11px;color:var(--text-muted);">vs Last Month</div></div>
+              <div><div style="font-size:20px;font-weight:800;color:var(--navy);">₹1.4Cr</div><div style="font-size:11px;color:var(--text-muted);">Annual ARR</div></div>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-title">User Management</div>
+            <div class="chart-sub">Recent registrations</div>
+            <div style="display:flex;gap:8px;margin-bottom:16px;">
+              <input placeholder="Search users..." style="flex:1;" />
+              <button class="btn btn-secondary btn-sm">Filter</button>
+            </div>
+            <div class="table-responsive table-fit">
+              <table style="font-size:13px;">
+                <thead><tr><th>User</th><th>Plan</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr><td><div style="font-weight:600;">Rahul Sharma</div><div style="font-size:11px;color:var(--text-muted);">Mumbai · 4 vehicles</div></td><td><span class="badge badge-blue">Pro</span></td><td><span class="badge badge-green">Active</span></td></tr>
+                  <tr><td><div style="font-weight:600;">Priya Krishnan</div><div style="font-size:11px;color:var(--text-muted);">Pune · 2 vehicles</div></td><td><span class="badge badge-slate">Free</span></td><td><span class="badge badge-green">Active</span></td></tr>
+                  <tr><td><div style="font-weight:600;">Sai Gardens Mgmt</div><div style="font-size:11px;color:var(--text-muted);">Mumbai · 248 vehicles</div></td><td><span class="badge badge-indigo">Society</span></td><td><span class="badge badge-green">Active</span></td></tr>
+                  <tr><td><div style="font-weight:600;">Amit Joshi</div><div style="font-size:11px;color:var(--text-muted);">Bangalore · 1 vehicle</div></td><td><span class="badge badge-blue">Pro</span></td><td><span class="badge badge-yellow">Trial</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:24px;" class="chart-card">
+          <div class="chart-title">QR Analytics</div>
+          <div class="chart-sub">Scan type breakdown</div>
+          <div class="analytics-grid">
+            <div style="text-align:center;padding:20px;background:var(--bg);border-radius:14px;">
+              <div style="font-size:32px;font-weight:800;color:var(--blue);">78%</div>
+              <div style="font-size:13px;font-weight:600;margin-top:4px;">View Only</div>
+              <div style="font-size:11px;color:var(--text-muted);">3.28M scans</div>
+            </div>
+            <div style="text-align:center;padding:20px;background:var(--bg);border-radius:14px;">
+              <div style="font-size:32px;font-weight:800;color:var(--emerald);">16%</div>
+              <div style="font-size:13px;font-weight:600;margin-top:4px;">Contact Requests</div>
+              <div style="font-size:11px;color:var(--text-muted);">672K scans</div>
+            </div>
+            <div style="text-align:center;padding:20px;background:var(--bg);border-radius:14px;">
+              <div style="font-size:32px;font-weight:800;color:#f59e0b;">5%</div>
+              <div style="font-size:13px;font-weight:600;margin-top:4px;">Emergency</div>
+              <div style="font-size:11px;color:var(--text-muted);">210K scans</div>
+            </div>
+            <div style="text-align:center;padding:20px;background:var(--bg);border-radius:14px;">
+              <div style="font-size:32px;font-weight:800;color:var(--indigo);">1%</div>
+              <div style="font-size:13px;font-weight:600;margin-top:4px;">Invalid</div>
+              <div style="font-size:11px;color:var(--text-muted);">42K scans</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

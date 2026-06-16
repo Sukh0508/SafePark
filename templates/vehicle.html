@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+ {% block content %}   
+
+
+<!-- ============================================================ -->
+<!-- SCREEN 5: VEHICLE MANAGEMENT -->
+<!-- ============================================================ -->
+ 
+<div id="screen-vehicles" class="screen active">
+  <div class="dashboard-layout">
+    <div class="sidebar">
+      <div class="sidebar-logo"><div class="logo"><div class="logo-icon">🅿️</div><span class="logo-text" style="color:white;">Safe<span>Park</span></span></div></div>
+         <nav class="sidebar-nav">
+        <div class="nav-section-label">Main</div>
+       <a href="{% url 'dashboard' %}" style="text-decoration: none;" > <button class="nav-item active"><span class="nav-icon">📊</span> Dashboard</button></a>
+       <a href="/vehicle" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">🚗</span> My Vehicles</button></a>
+       <a href="{% url 'qr_create' %}" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">📱</span> Generate QR</button></a>
+       <a href="{% url 'scan_history'%}" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">📋</span> Scan History</button></a>
+        <div class="nav-section-label">Account</div>
+       <a href="{% url 'notification' %}" style="text-decoration: none;"><button class="nav-item"><span class="nav-icon">🔔</span> Notifications <span class="nav-badge">{{ notification_count }}</span></button></a>
+        
+        <a href="/profile" style="text-decoration: none;"><button class="nav-item"><span class="nav-icon">👤</span> Profile</button></a>
+        <div class="nav-section-label">System</div>
+       
+      <a href="{% url 'logout' %}" style="text-decoration: none;"><button class="nav-item" ><span class="nav-icon">🚪</span> Logout</button></a>
+      </nav>
+        <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar">🅿️</div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name">{{ request.user.first_name }}</div>
+            <!-- <div class="sidebar-user-role">Pro Plan · 4 vehicles</div> -->
+          </div>
+          <span style="color:rgba(255,255,255,0.3);font-size:14px;">⚙</span>
+        </div>
+      </div>
+    </div>
+    <div class="main-content">
+      <div class="topbar">
+        <div class="topbar-left"><div class="topbar-breadcrumb"><span style="color:var(--text-muted)">SafePark</span><span class="breadcrumb-sep">/</span><span class="breadcrumb-current">My Vehicles</span></div></div>
+        <div class="topbar-right"><a href="{% url 'notification' %}" style="text-decoration: none;"><div class="icon-btn">🔔<div class="notif-dot"></div></div></a><div class="icon-btn">❓</div><div class="icon-btn">🅿️</div></div>
+      </div>
+      <div class="page-content">
+        <div class="page-header">
+          <div class="page-header-flex">
+            <div><h1 class="page-title">My Vehicles</h1><p class="page-sub">Manage your registered vehicles and QR codes</p></div>
+            <a href="/add_vehicle"><button class="btn btn-primary btn-sm">+ Add New Vehicle</button></a>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <div class="table-header">
+            <div>
+              <div class="table-title">Vehicle Registry</div>
+              <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">{{ total_vehicles }} Total </div>
+            </div>
+            <div class="table-actions">
+              <form action="" method="Get">
+                {% csrf_token %}
+                <input placeholder="Search vehicles..." style="min-width:200px;" name="q" value="{{ request.GET.get }}"  />
+                <button class="btn btn-secondary btn-sm" type="submit">🔍 Search</button>
+              </form>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table>
+              <thead><tr><th>Vehicle No.</th><th>Type</th><th>Brand & Model</th><th>Color</th><th>QR Status</th><th>Actions</th></tr></thead>
+              <tbody>
+                {% for vehicle in vehicles %}
+                <tr>
+                  
+                  <td><div class="vehicle-num">{{ vehicle.vehicle_number }}</div></td>
+                  <td><span class="badge badge-blue">{{ vehicle.vehicle_type}}</span></td>
+                  <td><div style="font-weight:600;">{{ vehicle.brand }}</div><div style="font-size:12px;color:var(--text-muted);">{{ vehicle.year_of_manufacture}}</div></td>
+                  <td>
+   <div style="display:flex;align-items:center;gap:8px;">
+      <span style="
+          width:16px;
+          height:16px;
+          border-radius:50%;
+          background-color: {{ vehicle.vehicle_color_code }};
+          border: 1px solid #ccc;
+          display:inline-block;">
+      </span>
+  
+      {{ vehicle.vehicle_color_name }}
+  </div>
+  </td>
+                  <td>
+                    {% if vehicle.is_qr_generated %}
+                    <div class="qr-status status-active"><div class="qr-dot"></div>QR Generated</div>
+                    {% else %}
+                    <div class="qr-status status-active"><div class="qr-dot" style="background-color: red;"></div>Pending</div>
+                    {% endif %}
+                  </td>
+                  <td><div class="action-btns">
+                    <!-- <button class="btn btn-ghost btn-sm">👁 View</button> -->
+                    <!-- <button class="btn btn-ghost btn-sm">✏️ Edit</button> -->
+                   <a href="{% url 'qr_create' %}"> <button class="btn btn-primary btn-sm">📱 QR</button></a>
+                   <a href="{% url 'delete_vehicle' vehicle.qr_id %}"><button class="btn btn-danger btn-sm">🗑</button></a></div></td>
+                  
+                </tr>
+                {% empty %}
+      <tr>
+          <td colspan="6" style="text-align:center;padding:20px;color:red;">
+              🚫 No vehicle found
+          </td>
+      </tr>
+                {% endfor %}
+               
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

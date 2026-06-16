@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- ============================================================ -->
+<!-- SCREEN 7: QR MANAGEMENT -->
+<!-- ============================================================ -->
+<div id="screen-qr-management" class="screen active">
+  <div class="dashboard-layout">
+    <div class="sidebar">
+      <div class="sidebar-logo"><div class="logo"><div class="logo-icon">🅿️</div><span class="logo-text" style="color:white;">Safe<span>Park</span></span></div></div>
+       <nav class="sidebar-nav">
+        <div class="nav-section-label">Main</div>
+       <a href="{% url 'dashboard' %}" style="text-decoration: none;" > <button class="nav-item active"><span class="nav-icon">📊</span> Dashboard</button></a>
+       <a href="/vehicle" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">🚗</span> My Vehicles</button></a>
+       <a href="{% url 'qr_create' %}" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">📱</span> Generate QR</button></a>
+       <a href="{% url 'scan_history'%}" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">📋</span> Scan History</button></a>
+        <div class="nav-section-label">Account</div>
+       <a href="{% url 'notification' %}" style="text-decoration: none;"><button class="nav-item"><span class="nav-icon">🔔</span> Notifications <span class="nav-badge">{{ notification_count }}</span></button></a>
+        
+        <a href="/profile" style="text-decoration: none;"><button class="nav-item"><span class="nav-icon">👤</span> Profile</button></a>
+        <div class="nav-section-label">System</div>
+       
+      <a href="{% url 'logout' %}" style="text-decoration: none;"><button class="nav-item" ><span class="nav-icon">🚪</span> Logout</button></a>
+      </nav>
+        <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar">🅿️</div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name">{{ request.user.first_name }}</div>
+            <!-- <div class="sidebar-user-role">Pro Plan · 4 vehicles</div> -->
+          </div>
+          <span style="color:rgba(255,255,255,0.3);font-size:14px;">⚙</span>
+        </div>
+      </div>
+    </div>
+    <div class="main-content">
+      <div class="topbar">
+        <div class="topbar-left"><div class="topbar-breadcrumb"><span style="color:var(--text-muted)">SafePark</span><span class="breadcrumb-sep">/</span><span class="breadcrumb-current">QR Management</span></div></div>
+ <div class="topbar-right"><a href="{% url 'notification' %}" style="text-decoration: none;"><div class="icon-btn">🔔<div class="notif-dot"></div></div></a><div class="icon-btn">❓</div><div class="icon-btn">🅿️</div></div>      </div>
+      <div class="page-content">
+        <div class="page-header"><h1 class="page-title">QR Code Management</h1><p class="page-sub">Download, print, and share your vehicle QR codes</p></div>
+
+        <div class="qr-layout-grid">
+          <div>
+            <div class="qr-preview-card">
+              <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:16px;">QR Preview</div>
+              <div class="qr-big" style="position:relative;" id="qrcode">
+                <div style="position:absolute;top:12px;left:12px;width:24px;height:24px;border-top:4px solid var(--blue);border-left:4px solid var(--blue);border-radius:4px 0 0 0;"></div>
+                <div style="position:absolute;top:12px;right:12px;width:24px;height:24px;border-top:4px solid var(--blue);border-right:4px solid var(--blue);border-radius:0 4px 0 0;"></div>
+                <div style="position:absolute;bottom:12px;left:12px;width:24px;height:24px;border-bottom:4px solid var(--blue);border-left:4px solid var(--blue);border-radius:0 0 0 4px;"></div>
+                <div style="position:absolute;bottom:12px;right:12px;width:24px;height:24px;border-bottom:4px solid var(--blue);border-right:4px solid var(--blue);border-radius:0 0 4px 0;"></div>
+                <!-- <span style="font-size:90px;z-index:1;position:relative;">▦</span> -->
+              </div>
+                <div id="status"></div>
+              <div class="hero-card-plate">MH 02 XX XXXX</div>
+                <div style="margin-top:16px;">
+              <label style="margin-bottom:8px;">Select Vehicle</label>
+              <select name="vehicle" id="vehicleSelect">
+                 <option value="">Select Vehicle</option>
+                {% for vehicle in vehicles %}
+                <option value="{{ vehicle.qr_id}}"
+                data-number="{{vehicle.vehicle_number}}"
+                data-brand="{{vehicle.vehicle_type}}"
+                >{{vehicle.vehicle_number}} - {{ vehicle.vehicle_type}} </option>
+                {% endfor %}
+                <!-- <option>MH 02 CD 5678 – Honda City</option>
+                <option>MH 02 EF 9012 – Royal Enfield</option>
+                <option>MH 02 GH 3456 – Tata Nexon EV</option> -->
+              </select>
+            </div>
+              <!-- <div style="margin-top:12px;font-size:14px;font-weight:600;">Toyota Fortuner · Silver</div>
+              <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Generated: Dec 12, 2025</div>
+              <div style="margin-top:16px;"><span class="badge badge-green">✓ Active & Verified</span></div> -->
+            </div>
+            <!-- <div id="qrcode"></div> -->
+          
+
+          
+          </div>
+
+          <div>
+            <div class="card" style="padding: 24px;">
+              <div style="font-size:16px;font-weight:700;color:var(--navy);margin-bottom:20px;">Actions</div>
+              <div class="qr-actions-grid">
+                <div class="qr-action-btn">
+                  <div class="qr-action-icon">📥</div>
+                  <div class="qr-action-label"><button style="background: transparent; border: none;" type="button" id="downloadBtn">Download</button></div>
+                  <div class="qr-action-sub">High-resolution print ready</div>
+                  <div class="msg-box"></div>
+                </div>
+              <!-- <div class="qr-action-btn">
+                <div class="qr-action-icon">🖨️</div>
+                <div class="qr-action-label">Print Sticker</div>
+                <div class="qr-action-sub">Weatherproof sticker format</div>
+              </div>
+              <div class="qr-action-btn">
+                <div class="qr-action-icon">📤</div>
+                <div class="qr-action-label">Share QR</div>
+                <div class="qr-action-sub">WhatsApp, Email, Link</div>
+              </div>
+              <div class="qr-action-btn">
+                <div class="qr-action-icon">🔄</div>
+                <div class="qr-action-label">Regenerate</div>
+                <div class="qr-action-sub">Get a new QR code</div>
+              </div> -->
+                 <div class="card" >
+              <div style="padding: 24px;">
+                <div style="font-size:15px;font-weight:700;color:var(--navy);margin-bottom:16px;">📊 QR Performance</div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+                  <div style="text-align:center;padding:16px;background:var(--bg);border-radius:12px; display: flex; gap: 20px;">
+                    <div style="font-size: 20px;font-weight:800;color:var(--navy);">{{ total_qr }}</div>
+                    <div style="font-size:12px;color:var(--text-muted);">Total Scans</div>
+                  </div>
+                  <!-- <div style="text-align:center;padding:16px;background:var(--bg);border-radius:12px;">
+                    <div style="font-size:28px;font-weight:800;color:var(--emerald);">12</div>
+                    <div style="font-size:12px;color:var(--text-muted);">This Week</div>
+                  </div>
+                  <div style="text-align:center;padding:16px;background:var(--bg);border-radius:12px;">
+                    <div style="font-size:28px;font-weight:800;color:var(--blue);">3</div>
+                    <div style="font-size:12px;color:var(--text-muted);">Contact Requests</div>
+                  </div> -->
+                </div>
+              </div>
+            </div>
+              
+            </div>
+
+         
+
+            <div style="margin-top:16px;padding:20px;background:linear-gradient(135deg,#fef3c7,#fef9ec);border-radius:14px;border:1px solid #fde68a;">
+              <div style="font-size:13px;font-weight:700;color:#92400e;margin-bottom:6px;">⚠️ QR Code Security</div>
+              <p style="font-size:13px;color:#92400e;line-height:1.6;">Never share your QR code digitally on public platforms. The physical sticker on your vehicle is the secure, intended use case.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded",function () {
+  
+
+  const qr_gen = document.getElementById("qrcode")
+  const select_vehicle = document.getElementById("vehicleSelect")
+
+ function generateQR() {
+
+    const qr_id = select_vehicle.value.trim();
+
+    // console.log("Selected:", vehicleid);
+
+    // 🔥 BLOCK EMPTY VALUE STRICTLY
+    if (qr_id === "") {
+        qr_gen.innerHTML = "";
+        document.getElementById("status").innerText = "Please select vehicle";
+        return;
+    }
+
+    document.getElementById("status").innerText = "Generating QR...";
+    qr_gen.innerHTML = "";
+
+    setTimeout(() => {
+
+      
+      new QRCode(qr_gen, {
+        text: "http://10.83.97.35:8000/qr/" + qr_id + "/",
+        width: 200,
+        height: 200
+      });
+      document.getElementById("status").innerText = "";
+       
+
+    }, 2500);
+}
+  select_vehicle.addEventListener('change',generateQR)
+
+  })
+  document.getElementById("downloadBtn").onclick = function () {
+
+    const qr_id = document.getElementById("vehicleSelect").value;
+
+    if (!qr_id) {
+        alert("Please select a vehicle");
+        return;
+    }
+
+    window.location.href = "/download_qr/" + qr_id + "/";
+};
+
+ 
+</script>
+{% endblock %}

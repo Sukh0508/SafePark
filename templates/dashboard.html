@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- ============================================================ -->
+<!-- SCREEN 4: USER DASHBOARD -->
+<!-- ============================================================ -->
+<div id="screen-dashboard" class="screen active">
+  <div class="dashboard-layout">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo">
+          <div class="logo-icon">🅿️</div>
+          <span class="logo-text" style="color:white;">Safe<span>Park</span></span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Main</div>
+       <a href="{% url 'dashboard' %}" style="text-decoration: none;" > <button class="nav-item active"><span class="nav-icon">📊</span> Dashboard</button></a>
+       <a href="/vehicle" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">🚗</span> My Vehicles</button></a>
+       <a href="{% url 'qr_create' %}" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">📱</span> Generate QR</button></a>
+       <a href="{% url 'scan_history'%}" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">📋</span> Scan History</button></a>
+        <div class="nav-section-label">Account</div>
+       <a href="{% url 'notification' %}" style="text-decoration: none;"><button class="nav-item"><span class="nav-icon">🔔</span> Notifications <span class="nav-badge">{{ notification_count }}</span></button></a>
+        
+        <a href="/profile" style="text-decoration: none;"><button class="nav-item"><span class="nav-icon">👤</span> Profile</button></a>
+        <div class="nav-section-label">System</div>
+       
+      <a href="{% url 'logout' %}" style="text-decoration: none;"><button class="nav-item" ><span class="nav-icon">🚪</span> Logout</button></a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar">🅿️</div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name">{{ request.user.first_name }}</div>
+            <!-- <div class="sidebar-user-role">Pro Plan · 4 vehicles</div> -->
+          </div>
+          <span style="color:rgba(255,255,255,0.3);font-size:14px;">⚙</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+   
+
+      <div class="page-content">
+           <div class="topbar">
+        <div class="topbar-left">
+          <div class="topbar-breadcrumb">
+            <span style="color:var(--text-muted)">SafePark</span>
+            <span class="breadcrumb-sep">/</span>
+            <span class="breadcrumb-current">Dashboard</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <a href="{% url 'notification' %}" style="text-decoration: none;"><div class="icon-btn">
+            🔔
+            <div class="notif-dot">{{ notification_count }}</div>
+          </div></a>
+          <div class="icon-btn">❓</div>
+          <div class="icon-btn">🅿️</div>
+        </div>
+      </div>
+        <div class="page-header">
+          <div class="page-header-flex">
+            <div>
+              <h1 class="page-title"> {{ request.user.first_name }} 👋</h1>
+              <p class="page-sub">Here's what's happening with your vehicles today.</p>
+            </div>
+            <a href="/add_vehicle"><button class="btn btn-primary btn-sm" >+ Add Vehicle</button></a>
+          </div>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon fi-blue">🚗</div>
+              <span class="stat-change stat-up">↑ +1</span>
+            </div>
+            <div class="stat-value">{{ total_vehicles }}</div>
+            <div class="stat-label">Total Vehicles</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon fi-emerald">📊</div>
+              <span class="stat-change stat-up">↑ +12%</span>
+            </div>
+            <div class="stat-value">{{ total_scan }}</div>
+            <div class="stat-label">Total QR Scans</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon fi-red">🔔</div>
+              <!-- <span class="stat-change stat-up">{{ notification_count }}</span> -->
+            </div>
+            <div class="stat-value">{{ notification_count }}</div>
+            <div class="stat-label">New Notifications</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon fi-indigo">✅</div>
+              <span class="stat-change stat-up">100%</span>
+            </div>
+            <div class="stat-value">{{ total_qr }}</div>
+            <div class="stat-label">Active QR Codes</div>
+          </div>
+        </div>
+
+        <!-- RECENT ACTIVITY & QUICK ACTIONS -->
+        <div class="dashboard-activity-grid">
+          <div class="table-wrap">
+            <div class="table-header">
+              <div class="table-title">Recent Scan Activity</div>
+              <a href="{% url 'notification' %}" style="text-decoration: none;"><button class="btn btn-secondary btn-sm" >View All</button></a>
+            </div>
+            <div class="table-responsive table-fit">
+              <table>
+                <thead><tr><th>Type</th><th>Date & Time</th></tr></thead>
+                <tbody>
+                  {% for notification in notifications %}
+                  <tr>
+                    <td><div class="vehicle-num">{{ notification.title }}</div><div style="font-size:12px;color:var(--text-muted)">{{ notification.message }}</div></td>
+                    <td><div style="font-size:13px;">{{ notification.created_at }}</div></td>
+                  </tr>
+                  {% empty %}
+                  <tr>
+                    <td colspan="2" style="text-align: center; color: var(--text-muted); padding: 24px;">
+                      No recent activity logs found.
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="quick-actions-sidebar">
+            <div class="card" style="padding:20px;">
+              <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:16px;">⚡ Quick Actions</div>
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <a href="/add_vehicle"><button class="btn btn-primary btn-sm" style="justify-content:center;width:100%;">+ Add New Vehicle</button></a>
+                <a href="{% url 'qr_create' %}"><button class="btn btn-secondary btn-sm" style="justify-content:center;width:100%;">📱 Manage QR Codes</button></a>
+                <a href="{% url 'notification' %}"><button class="btn btn-secondary btn-sm" style="justify-content:center;width:100%;">🔔 View Notifications</button></a>
+              </div>
+            </div>
+            <!-- <div class="card" style="padding:20px;">
+              <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:12px;">📊 Scan Overview</div>
+              <div style="font-size:11px;color:var(--text-muted);margin-bottom:12px;">Last 7 days</div>
+              <div class="mini-chart">
+                <div class="mini-bar" style="height:40%;background:var(--gradient-blue);"></div>
+                <div class="mini-bar" style="height:60%;"></div>
+                <div class="mini-bar" style="height:80%;"></div>
+                <div class="mini-bar" style="height:45%;"></div>
+                <div class="mini-bar" style="height:90%;"></div>
+                <div class="mini-bar" style="height:70%;"></div>
+                <div class="mini-bar" style="height:100%;background:linear-gradient(135deg,#10b981,#059669);"></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-top:8px;">
+                <span style="font-size:11px;color:var(--text-muted)">Mon</span>
+                <span style="font-size:11px;color:var(--text-muted)">Today</span>
+              </div>
+              <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:24px;font-weight:800;color:var(--navy);">48 <span style="font-size:13px;color:var(--emerald);font-weight:600;">↑ +8 today</span></div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

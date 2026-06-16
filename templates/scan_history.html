@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    
+    <!-- ============================================================ -->
+<!-- SCREEN 8: SCAN HISTORY -->
+<!-- ============================================================ -->
+<div id="screen-scan-history" class="screen active">
+  <div class="dashboard-layout">
+    <div class="sidebar">
+      <div class="sidebar-logo"><div class="logo"><div class="logo-icon">🅿️</div><span class="logo-text" style="color:white;">Safe<span>Park</span></span></div></div>
+       <nav class="sidebar-nav">
+        <div class="nav-section-label">Main</div>
+       <a href="{% url 'dashboard' %}" style="text-decoration: none;" > <button class="nav-item active"><span class="nav-icon">📊</span> Dashboard</button></a>
+       <a href="/vehicle" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">🚗</span> My Vehicles</button></a>
+       <a href="{% url 'qr_create' %}" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">📱</span> Generate QR</button></a>
+       <a href="{% url 'scan_history'%}" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">📋</span> Scan History</button></a>
+        <div class="nav-section-label">Account</div>
+       <a href="{% url 'notification' %}" style="text-decoration: none;"><button class="nav-item"><span class="nav-icon">🔔</span> Notifications <span class="nav-badge">{{ notification_count }}</span></button></a>
+        
+        <a href="/profile" style="text-decoration: none;"><button class="nav-item"><span class="nav-icon">👤</span> Profile</button></a>
+        <div class="nav-section-label">System</div>
+       
+      <a href="{% url 'logout' %}" style="text-decoration: none;"><button class="nav-item" ><span class="nav-icon">🚪</span> Logout</button></a>
+      </nav>
+        <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar">🅿️</div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name">{{ request.user.first_name }}</div>
+            <!-- <div class="sidebar-user-role">Pro Plan · 4 vehicles</div> -->
+          </div>
+          <span style="color:rgba(255,255,255,0.3);font-size:14px;">⚙</span>
+        </div>
+      </div>
+    </div>
+    <div class="main-content">
+      <div class="topbar">
+        <div class="topbar-left"><div class="topbar-breadcrumb"><span style="color:var(--text-muted)">SafePark</span><span class="breadcrumb-sep">/</span><span class="breadcrumb-current">Scan History</span></div></div>
+ <div class="topbar-right"><a href="{% url 'notification' %}" style="text-decoration: none;"><div class="icon-btn">🔔<div class="notif-dot"></div></div></a><div class="icon-btn">❓</div><div class="icon-btn">🅿️</div></div>      </div>
+      <div class="page-content">
+        <div class="page-header">
+          <div class="page-header-flex">
+            <div><h1 class="page-title">Scan History</h1><p class="page-sub">Complete log of all QR code scans across your vehicles</p></div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;">
+              <select style="min-width:160px;"><option>All Vehicles</option><option>MH 02 AB 1234</option><option>MH 02 CD 5678</option></select>
+              <!-- <button class="btn btn-secondary btn-sm">📥 Export</button> -->
+            </div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <div class="table-header">
+            <div class="table-title">{{ total_scan }} Total Scans</div>
+            <input placeholder="Search scans..." style="width:200px;" />
+          </div>
+          <div class="table-responsive">
+          <table>
+          <thead><tr><th>Date</th><th>Time</th><th>Name</th><th>Vehicle</th><th>Mobile no</th><th>Purpose</th><th>Status</th></tr></thead>
+            <tbody>
+              {% for scan in scans %}
+              <tr>
+                <td>{{ scan.scaned_at|date:"d M Y" }}</td>
+                <td>{{ scan.scaned_at|time:"h:i A" }}</td>
+                <td><div style="font-weight:600;">{{ scan.scanner_name }}</div></td>
+                <td><div class="vehicle-num" style="font-size:13px;">{{ scan.vehicle.vehicle_number}}</div></td>
+                <td><div class="vehicle-num" style="font-size:13px;">{{ scan.scanner_mobile }}</div></td>
+                <td><span class="badge badge-blue">{{ scan.purpose }}</span></td>
+                <td><span class="scan-history-status status-viewed">👁 Viewed</span></td>
+              </tr>
+              {% endfor %}
+              <!-- <tr>
+                <td>Dec 11, 2025</td>
+                <td>4:15 PM</td>
+                <td><div style="font-weight:600;">Verified User</div><div style="font-size:12px;color:var(--text-muted);">Pune, MH</div></td>
+                <td><div class="vehicle-num" style="font-size:13px;">MH 02 CD 5678</div></td>
+                <td><span class="badge badge-green">Contact Request</span></td>
+                <td><span class="scan-history-status status-contact">✉️ Contacted</span></td>
+              </tr>
+              <tr>
+                <td>Dec 10, 2025</td>
+                <td>9:00 AM</td>
+                <td><div style="font-weight:600;">Anonymous User</div><div style="font-size:12px;color:var(--text-muted);">Mumbai, MH</div></td>
+                <td><div class="vehicle-num" style="font-size:13px;">MH 02 AB 1234</div></td>
+                <td><span class="badge badge-red">Emergency</span></td>
+                <td><span class="scan-history-status status-emergency">🚨 Emergency</span></td>
+              </tr>
+              <tr>
+                <td>Dec 9, 2025</td>
+                <td>2:45 PM</td>
+                <td><div style="font-weight:600;">Anonymous User</div><div style="font-size:12px;color:var(--text-muted);">Thane, MH</div></td>
+                <td><div class="vehicle-num" style="font-size:13px;">MH 02 EF 9012</div></td>
+                <td><span class="badge badge-blue">Parking Info</span></td>
+                <td><span class="scan-history-status status-viewed">👁 Viewed</span></td>
+              </tr>
+              <tr>
+                <td>Dec 8, 2025</td>
+                <td>11:20 AM</td>
+                <td><div style="font-weight:600;">Verified User</div><div style="font-size:12px;color:var(--text-muted);">Mumbai, MH</div></td>
+                <td><div class="vehicle-num" style="font-size:13px;">MH 02 AB 1234</div></td>
+                <td><span class="badge badge-green">Contact Request</span></td>
+                <td><span class="scan-history-status status-contact">✉️ Contacted</span></td>
+              </tr> -->
+            </tbody>
+          </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

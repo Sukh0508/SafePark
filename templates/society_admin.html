@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SafePark – Smart Vehicle QR Contact System</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+<!-- ============================================================ -->
+<!-- SCREEN 12: SOCIETY ADMIN DASHBOARD -->
+<!-- ============================================================ -->
+<div id="screen-society-admin" class="screen">
+  <div class="dashboard-layout">
+    <div class="sidebar">
+      <div class="sidebar-logo"><div class="logo"><div class="logo-icon">🅿️</div><span class="logo-text" style="color:white;">Safe<span>Park</span></span></div></div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Society Admin</div>
+        <button class="nav-item active"><span class="nav-icon">📊</span> Dashboard</button>
+        <button class="nav-item"><span class="nav-icon">👥</span> Residents</button>
+        <button class="nav-item"><span class="nav-icon">🚗</span> Vehicles</button>
+        <button class="nav-item"><span class="nav-icon">⏳</span> Pending Approvals <span class="nav-badge">8</span></button>
+        <button class="nav-item"><span class="nav-icon">📋</span> Scan Reports</button>
+        <button class="nav-item"><span class="nav-icon">⚙️</span> Society Settings</button>
+        <button class="nav-item" onclick="showScreen('landing')"><span class="nav-icon">🚪</span> Logout</button>
+      </nav>
+      <div class="sidebar-footer"><div class="sidebar-user"><div class="sidebar-avatar" style="background:linear-gradient(135deg,#10b981,#059669);">SA</div><div class="sidebar-user-info"><div class="sidebar-user-name">Sai Gardens Admin</div><div class="sidebar-user-role">Society Administrator</div></div></div></div>
+    </div>
+    <div class="main-content">
+      <div class="topbar">
+        <div class="topbar-left"><div class="topbar-breadcrumb"><span style="color:var(--text-muted)">SafePark</span><span class="breadcrumb-sep">/</span><span class="breadcrumb-current">Society Dashboard</span></div></div>
+        <div class="topbar-right"><div class="icon-btn">🔔<div class="notif-dot"></div></div><div class="icon-btn" style="background:linear-gradient(135deg,#10b981,#059669);color:white;font-weight:bold;">SA</div></div>
+      </div>
+      <div class="page-content">
+        <div class="admin-header-card">
+          <h2>Sai Gardens Society 🏘️</h2>
+          <p>Mumbai, Maharashtra · Society Plan · Active since Jan 2024</p>
+          <div style="display:flex;gap:10px;margin-top:16px;">
+            <span class="badge" style="background:rgba(255,255,255,0.15);color:white;">✓ 120 Residents</span>
+            <span class="badge" style="background:rgba(255,255,255,0.15);color:white;">🚗 248 Vehicles</span>
+            <span class="badge" style="background:rgba(255,255,255,0.15);color:white;">📱 All QR Active</span>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-header"><div class="stat-icon fi-blue">👥</div><span class="stat-change stat-up">↑ +3</span></div>
+            <div class="stat-value">120</div>
+            <div class="stat-label">Total Residents</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header"><div class="stat-icon fi-indigo">🚗</div><span class="stat-change stat-up">↑ +5</span></div>
+            <div class="stat-value">248</div>
+            <div class="stat-label">Registered Vehicles</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header"><div class="stat-icon fi-emerald">📊</div><span class="stat-change stat-up">↑ +18%</span></div>
+            <div class="stat-value">3,492</div>
+            <div class="stat-label">Monthly Scans</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header"><div class="stat-icon fi-orange">⏳</div><span class="stat-change stat-down">8 new</span></div>
+            <div class="stat-value">8</div>
+            <div class="stat-label">Pending Approvals</div>
+          </div>
+        </div>
+
+        <div class="admin-content-grid">
+          <div class="chart-card">
+            <div class="chart-title">Monthly Scans</div>
+            <div class="chart-sub">Last 6 months</div>
+            <div class="bar-chart">
+              <div class="bar-col"><div class="bar" style="height:60%;background:var(--gradient-blue);"></div><div class="bar-label">Jul</div></div>
+              <div class="bar-col"><div class="bar" style="height:75%;background:var(--gradient-blue);"></div><div class="bar-label">Aug</div></div>
+              <div class="bar-col"><div class="bar" style="height:55%;background:var(--gradient-blue);"></div><div class="bar-label">Sep</div></div>
+              <div class="bar-col"><div class="bar" style="height:85%;background:var(--gradient-blue);"></div><div class="bar-label">Oct</div></div>
+              <div class="bar-col"><div class="bar" style="height:70%;background:var(--gradient-blue);"></div><div class="bar-label">Nov</div></div>
+              <div class="bar-col"><div class="bar" style="height:100%;background:linear-gradient(135deg,#10b981,#059669);"></div><div class="bar-label">Dec</div></div>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-title">Recent Registrations</div>
+            <div class="chart-sub">New residents this month</div>
+            <div class="recent-list">
+              <div class="recent-item">
+                <div class="recent-avatar">AK</div>
+                <div class="recent-info"><div class="recent-name">Anil Kumar</div><div class="recent-detail">B-301 · 2 vehicles · Dec 12</div></div>
+                <span class="badge badge-green">Active</span>
+              </div>
+              <div class="recent-item">
+                <div class="recent-avatar" style="background:linear-gradient(135deg,#4f46e5,#7c3aed);">PM</div>
+                <div class="recent-info"><div class="recent-name">Priya Mehta</div><div class="recent-detail">A-102 · 1 vehicle · Dec 10</div></div>
+                <span class="badge badge-green">Active</span>
+              </div>
+              <div class="recent-item">
+                <div class="recent-avatar" style="background:linear-gradient(135deg,#10b981,#059669);">SJ</div>
+                <div class="recent-info"><div class="recent-name">Suresh Joshi</div><div class="recent-detail">C-404 · 3 vehicles · Dec 8</div></div>
+                <span class="badge badge-yellow">Pending</span>
+              </div>
+              <div class="recent-item">
+                <div class="recent-avatar" style="background:linear-gradient(135deg,#f59e0b,#d97706);">RD</div>
+                <div class="recent-info"><div class="recent-name">Rekha Desai</div><div class="recent-detail">D-206 · 1 vehicle · Dec 7</div></div>
+                <span class="badge badge-yellow">Pending</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

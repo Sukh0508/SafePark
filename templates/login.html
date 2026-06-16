@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div id="screen-login" class="screen active">
+  <div class="auth-page">
+    <div class="auth-left">
+      <div class="auth-left-content">
+        <a href="#" class="logo" onclick="showScreen('landing')">
+          <div class="logo-icon">🅿️</div>
+          <span class="logo-text" style="color:white;">Safe<span>Park</span></span>
+        </a>
+        <h2>Your Vehicle's Digital Identity, Secured.</h2>
+        <p>Join 50,000+ vehicle owners who trust SafePark to handle their parking communication privately and efficiently.</p>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">🔐</div>
+          <div class="auth-feature-text">
+            <h4>End-to-End Privacy</h4>
+            <p>Your personal details are never exposed to scanners</p>
+          </div>
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">⚡</div>
+          <div class="auth-feature-text">
+            <h4>Instant Notifications</h4>
+            <p>Real-time alerts whenever your QR is scanned</p>
+          </div>
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">📱</div>
+          <div class="auth-feature-text">
+            <h4>Smart QR Technology</h4>
+            <p>High-quality QR stickers for every vehicle</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="auth-right">
+      <div class="auth-form-wrap fade-in-up">
+        <div class="auth-logo">
+          <div class="logo-icon">🅿️</div>
+          <span class="logo-text">Safe<span>Park</span></span>
+        </div>
+        <h1 class="auth-title">Welcome back</h1>
+        <p class="auth-sub">Sign in to access your SafePark dashboard</p>
+
+        <button class="social-login">
+          <span>🔵</span> Continue with Google
+        </button>
+
+        <div class="or-divider"><span>or continue with email</span></div>
+<form method="POST">
+  {% csrf_token %}
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" name="email" placeholder="you@example.com" />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" name="password" placeholder="Enter your password" />
+        </div>
+        <div class="auth-remember">
+          <label><input type="checkbox" checked /> Remember me for 30 days</label>
+          <a href="{% url 'password_reset' %}" class="auth-link">Forgot password?</a>
+        </div>
+        {% if error %}
+  <p style="color:red;" id="error-msg">{{ error }}</p>
+{% endif %}
+
+        <button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px;" type="submit" >
+          Sign In to SafePark →
+        </button>
+        </form>
+
+        <div class="auth-bottom">
+          Don't have an account? <a href="/register/" class="auth-link">Create one free →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+setTimeout(function() {
+    let errorBox = document.getElementById("error-msg");
+    if (errorBox) {
+        errorBox.style.display = "none";
+    }
+}, 3000); // 3000ms = 3 seconds
+</script>
+{% endblock %}

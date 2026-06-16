@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    
+    
+
+<!-- ============================================================ -->
+<!-- SCREEN 11: USER PROFILE -->
+<!-- ============================================================ -->
+<div id="screen-profile" class="screen active">
+  <div class="dashboard-layout">
+    <div class="sidebar">
+      <div class="sidebar-logo"><div class="logo"><div class="logo-icon">🅿️</div><span class="logo-text" style="color:white;">Safe<span>Park</span></span></div></div>
+        <nav class="sidebar-nav">
+        <div class="nav-section-label">Main</div>
+       <a href="{% url 'dashboard' %}" style="text-decoration: none;" > <button class="nav-item active"><span class="nav-icon">📊</span> Dashboard</button></a>
+       <a href="/vehicle" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">🚗</span> My Vehicles</button></a>
+       <a href="{% url 'qr_create' %}" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">📱</span> Generate QR</button></a>
+       <a href="{% url 'scan_history'%}" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">📋</span> Scan History</button></a>
+        <div class="nav-section-label">Account</div>
+       <a href="{% url 'notification' %}" style="text-decoration: none;"><button class="nav-item"><span class="nav-icon">🔔</span> Notifications <span class="nav-badge">{{ notification_count }}</span></button></a>
+        
+        <a href="/profile" style="text-decoration: none;"><button class="nav-item"><span class="nav-icon">👤</span> Profile</button></a>
+        <div class="nav-section-label">System</div>
+       
+      <a href="{% url 'logout' %}" style="text-decoration: none;"><button class="nav-item" ><span class="nav-icon">🚪</span> Logout</button></a>
+      </nav>
+        <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar">🅿️</div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name">{{ request.user.first_name }}</div>
+            <!-- <div class="sidebar-user-role">Pro Plan · 4 vehicles</div> -->
+          </div>
+          <span style="color:rgba(255,255,255,0.3);font-size:14px;">⚙</span>
+        </div>
+      </div>
+    </div>
+    <div class="main-content">
+      <div class="topbar">
+        <div class="topbar-left"><div class="topbar-breadcrumb"><span style="color:var(--text-muted)">SafePark</span><span class="breadcrumb-sep">/</span><span class="breadcrumb-current">My Profile</span></div></div>
+        <!-- <div class="topbar-right"><button class="btn btn-primary btn-sm">Save Changes</button></div> -->
+      </div>
+      <div class="page-content">
+        <div class="page-header"><h1 class="page-title">My Profile</h1><p class="page-sub">Manage your personal information and account settings</p></div>
+        <div class="profile-grid">
+          <div>
+            <div class="profile-card">
+              <div class="profile-name">{{ request.user.first_name }} </div>
+              <div class="profile-email">{{ request.user.email }} </div>
+              <span class="badge badge-blue" style="margin-bottom:20px;">⭐ Pro Plan</span>
+              <div class="divider"></div>
+              <div class="profile-info-item"><span class="profile-info-icon">📱</span>{{ profile.mobile }}</div>
+              <div class="profile-info-item"><span class="profile-info-icon">🏘️</span>{{profile.society_name}}</div>
+              <div class="profile-info-item"><span class="profile-info-icon">🏠</span>{{ profile.address}}</div>
+              <div class="profile-info-item"><span class="profile-info-icon">📍</span>{{profile.state}}</div>
+            </div>
+          </div>
+          <div class="profile-right-sections">
+            <div class="form-card">
+              <div class="form-card-header"><div style="font-size:15px;font-weight:700;color:var(--navy);">👤 Personal Information</div></div>
+              <div class="form-card-body">
+                <form action="" method="post">
+                  {% csrf_token %}
+                  <div class="form-grid-2">
+                    <div class="form-group"><label>Name</label><input type="text" value="{{ request.user.first_name }}" /></div>
+                  </div>
+                  <div class="form-group"><label>Email Address</label><input type="email" name="email" value="{{ request.user.email }}" /></div>
+                  <div class="form-group"><label>Mobile Number</label><input type="tel" name="mobile" value="{{ profile.mobile }}" /></div>
+                  <div class="form-grid-2">
+                    <div class="form-group"><label>Society Name</label><input type="text" name="society_name" value="{{profile.society_name}}"/></div>
+                    <div class="form-group"><label>Address</label><input type="text" name="address" value="{{ profile.address}}" /></div>
+                  </div>
+                  <div class="form-grid-2">
+                    <div class="form-group"><label>City</label><input type="text" name="city" value="{{profile.city}}" /></div>
+                    <div class="form-group"><label>State</label><input type="text" name="state" value="{{profile.state}}" /></div>
+                  </div>
+                  <button class="btn btn-primary" type="submit">Update Personal Info</button>
+                </form>
+              </div>
+            </div>
+
+            <div class="form-card">
+              <div class="form-card-header"><div style="font-size:15px;font-weight:700;color:var(--navy);">🚨 Emergency Contact</div><div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Displayed in emergency scan situations only</div></div>
+              <div class="form-card-body">
+                <div class="form-grid-2">
+                  <div class="form-group"><label>Contact Name</label><input type="text" name="emergency_contact_name" value="{{profile.emergency_contact_name}}" /></div>
+                  <!-- <div class="form-group"><label>Relationship</label><select><option>Spouse</option><option>Parent</option><option>Sibling</option><option>Friend</option></select></div> -->
+                </div>
+                <div class="form-group"><label>Emergency Phone</label><input type="tel" name="emergency_conatct_number" value="{{profile.emergency_conatct_number}}"/></div>
+                <button class="btn btn-secondary" type="submit">Update Emergency Contact</button>
+              </div>
+            </div>
+            <div class="form-card">
+  <div class="form-card-header">
+    <div style="font-size:15px;font-weight:700;color:var(--navy);">
+      🔒 Privacy Settings
+    </div>
+  </div>
+
+  <div class="form-card-body">
+
+    <label>
+      <input type="checkbox" name="show_name"
+      {% if profile.show_name %}checked{% endif %}>
+      Show Name
+    </label>
+
+    <br><br>
+
+    <label>
+      <input type="checkbox" name="show_city"
+      {% if profile.show_city %}checked{% endif %}>
+      Show City
+    </label>
+
+    <br><br>
+
+    <label>
+      <input type="checkbox" name="show_mobile"
+      {% if profile.show_mobile %}checked{% endif %}>
+      Show Mobile Number
+    </label>
+
+    <br><br>
+
+    <label>
+      <input type="checkbox" name="show_email"
+      {% if profile.show_email %}checked{% endif %}>
+      Show Email
+    </label>
+
+    <br><br>
+
+    <button class="btn btn-primary" type="submit">
+      Save Privacy Settings
+    </button>
+
+  </div>
+</div>
+            </form>
+
+            <!-- <div class="form-card">
+              <div class="form-card-header"><div style="font-size:15px;font-weight:700;color:var(--navy);">🔑 Change Password</div></div>
+              <div class="form-card-body">
+                <div class="form-group"><label>Current Password</label><input type="password" placeholder="Enter current password" /></div>
+                <div class="form-grid-2">
+                  <div class="form-group"><label>New Password</label><input type="password" placeholder="Min. 8 characters" /></div>
+                  <div class="form-group"><label>Confirm New Password</label><input type="password" placeholder="Repeat new password" /></div>
+                </div>
+                <button class="btn btn-secondary">Change Password</button>
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

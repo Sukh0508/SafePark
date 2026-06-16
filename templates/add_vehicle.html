@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <!-- ============================================================ -->
+<!-- SCREEN 6: ADD VEHICLE PAGE -->
+<!-- ============================================================ -->
+<div id="screen-add-vehicle" class="screen active">
+  <div class="dashboard-layout">
+    <div class="sidebar">
+      <div class="sidebar-logo"><div class="logo"><div class="logo-icon">🅿️</div><span class="logo-text" style="color:white;">Safe<span>Park</span></span></div></div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Main</div>
+        <button class="nav-item" onclick="showScreen('dashboard')"><span class="nav-icon">📊</span> Dashboard</button>
+        <button class="nav-item active" onclick="showScreen('vehicles')"><span class="nav-icon">🚗</span> My Vehicles</button>
+        <button class="nav-item" onclick="showScreen('qr-management')"><span class="nav-icon">📱</span> Generate QR</button>
+        <button class="nav-item" onclick="showScreen('scan-history')"><span class="nav-icon">📋</span> Scan History</button>
+        <div class="nav-section-label">Account</div>
+        <button class="nav-item" onclick="showScreen('notifications')"><span class="nav-icon">🔔</span> Notifications <span class="nav-badge">3</span></button>
+        <button class="nav-item" onclick="showScreen('privacy')"><span class="nav-icon">🔒</span> Privacy Settings</button>
+        <button class="nav-item" onclick="showScreen('profile')"><span class="nav-icon">👤</span> Profile</button>
+        <button class="nav-item" onclick="showScreen('landing')"><span class="nav-icon">🚪</span> Logout</button>
+      </nav>
+      <div class="sidebar-footer"><div class="sidebar-user"><div class="sidebar-avatar">RS</div><div class="sidebar-user-info"><div class="sidebar-user-name">Rahul Sharma</div><div class="sidebar-user-role">Pro Plan</div></div></div></div>
+    </div>
+    <div class="main-content">
+      <div class="topbar">
+        <div class="topbar-left"><div class="topbar-breadcrumb"><span style="color:var(--text-muted)">SafePark</span><span class="breadcrumb-sep">/</span><span style="color:var(--text-muted)">Vehicles</span><span class="breadcrumb-sep">/</span><span class="breadcrumb-current">Add Vehicle</span></div></div>
+        <div class="topbar-right"><div class="icon-btn">🔔<div class="notif-dot"></div></div><div class="icon-btn">❓</div><div class="icon-btn">RS</div></div>
+      </div>
+      <div class="page-content">
+        <div class="page-header">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+            <button class="btn btn-ghost btn-sm" onclick="showScreen('vehicles')">← Back</button>
+          </div>
+          <h1 class="page-title">Add New Vehicle</h1>
+          <p class="page-sub">Register your vehicle to generate a unique QR code</p>
+        </div>
+
+        <div class="form-layout-grid">
+          <div class="form-card">
+            <div class="form-card-header">
+              <div style="font-size:16px;font-weight:700;color:var(--navy);">Vehicle Information</div>
+              <div style="font-size:13px;color:var(--text-muted);margin-top:2px;">Fill in accurate details for QR identification</div>
+            </div>
+            <form action="" method="post">
+            {% csrf_token %}
+            <div class="form-card-body">
+              <div class="form-group">
+                <label>Vehicle Registration Number *</label>
+                <input type="text" name="number" placeholder="e.g. MH 02 AB 1234" style="font-weight:700;letter-spacing:2px;text-transform:uppercase;" />
+              </div>
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label>Vehicle Type *</label>
+                  <select name="vehicle_type">
+                    <option value="">Select type...</option>
+                    <option value="car" >Car</option>
+                    <option value="Motorcycle / Bike" >Motorcycle / Bike</option>
+                    <option value="SUV" >SUV</option>
+                    <option value="Truck" >Truck</option>
+                    <option value="Van" >Van</option>
+                    <option value="EV" >EV</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Brand / Make *</label>
+                  <select name="brand">
+                    <option value="">Select brand...</option>
+                    <option value="Toyota">Toyota</option>
+                    <option value="Honda">Honda</option>
+                    <option value="Tata">Tata</option>
+                    <option value="Maruti Suzuki">Maruti Suzuki</option>
+                    <option value="Hyundai">Hyundai</option>
+                    <option value="Mahindra">Mahindra</option>
+                    <option value="Royal Enfield">Royal Enfield</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label>Model *</label>
+                  <input type="text" placeholder="e.g. Fortuner, City, Nexon" name="model" />
+                </div>
+                <div class="form-group">
+                  <label>Year of Manufacture</label>
+                  <input type="text" placeholder="e.g. 2022" name="manufacture"/>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Vehicle Color *</label>
+                <div style="display:flex;gap:10px;align-items:center;">
+                  <input type="text"  name="color_name" placeholder="e.g. Silver, Black, White" />
+                  <input type="color" name="color_code" style="width:48px;height:48px;padding:4px;cursor:pointer;border-radius:8px;" />
+                </div>
+              </div>
+           
+              <div style="display:flex;gap:14px;margin-top:8px;">
+                <button class="btn btn-secondary">Cancel</button>
+                <button class="btn btn-primary pulse-glow" type="submit" style="flex:1;justify-content:center;">
+                  📱 Save Vehicle & Generate QR →
+                </button>
+              </div>
+            </div>
+            </form>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <div class="card" style="padding:24px;">
+              <div style="font-size:14px;font-weight:700;margin-bottom:12px;">📋 Checklist</div>
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <div style="display:flex;gap:10px;font-size:13px;"><span style="color:var(--emerald);">✓</span> Valid registration number</div>
+                <div style="display:flex;gap:10px;font-size:13px;color:var(--text-muted);"><span>○</span> Vehicle type selected</div>
+                <div style="display:flex;gap:10px;font-size:13px;color:var(--text-muted);"><span>○</span> Brand & model filled</div>
+                <div style="display:flex;gap:10px;font-size:13px;color:var(--text-muted);"><span>○</span> Color specified</div>
+                <div style="display:flex;gap:10px;font-size:13px;color:var(--text-muted);"><span>○</span> Photo uploaded</div>
+              </div>
+            </div>
+            <div class="card" style="padding:24px;background:linear-gradient(135deg,#eff6ff,#f5f3ff);">
+              <div style="font-size:14px;font-weight:700;margin-bottom:8px;">💡 Tips</div>
+              <p style="font-size:13px;color:var(--text-secondary);line-height:1.6;">Use the exact plate number as on your vehicle documents. A clear photo helps with verification and trust building.</p>
+            </div>
+            <div class="card" style="padding:24px;">
+              <div style="font-size:14px;font-weight:700;margin-bottom:8px;">📱 After Adding</div>
+              <p style="font-size:13px;color:var(--text-secondary);line-height:1.6;">A unique QR code will be generated instantly. Download it as a PDF and get it printed as a weatherproof sticker.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SafePark – Smart Vehicle QR Contact System</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+    
+<!-- ============================================================ -->
+<!-- SCREEN 10: PRIVACY SETTINGS -->
+<!-- ============================================================ -->
+<div id="screen-privacy" class="screen">
+  <div class="dashboard-layout">
+    <div class="sidebar">
+      <div class="sidebar-logo"><div class="logo"><div class="logo-icon">🅿️</div><span class="logo-text" style="color:white;">Safe<span>Park</span></span></div></div>
+      <nav class="sidebar-nav">
+        <button class="nav-item" onclick="showScreen('dashboard')"><span class="nav-icon">📊</span> Dashboard</button>
+        <button class="nav-item" onclick="showScreen('vehicles')"><span class="nav-icon">🚗</span> My Vehicles</button>
+        <button class="nav-item" onclick="showScreen('qr-management')"><span class="nav-icon">📱</span> Generate QR</button>
+        <button class="nav-item" onclick="showScreen('scan-history')"><span class="nav-icon">📋</span> Scan History</button>
+        <button class="nav-item" onclick="showScreen('notifications')"><span class="nav-icon">🔔</span> Notifications <span class="nav-badge">3</span></button>
+        <button class="nav-item active" onclick="showScreen('privacy')"><span class="nav-icon">🔒</span> Privacy Settings</button>
+        <button class="nav-item" onclick="showScreen('profile')"><span class="nav-icon">👤</span> Profile</button>
+        <button class="nav-item" onclick="showScreen('landing')"><span class="nav-icon">🚪</span> Logout</button>
+      </nav>
+      <div class="sidebar-footer"><div class="sidebar-user"><div class="sidebar-avatar">RS</div><div class="sidebar-user-info"><div class="sidebar-user-name">Rahul Sharma</div><div class="sidebar-user-role">Pro Plan</div></div></div></div>
+    </div>
+    <div class="main-content">
+      <div class="topbar">
+        <div class="topbar-left"><div class="topbar-breadcrumb"><span style="color:var(--text-muted)">SafePark</span><span class="breadcrumb-sep">/</span><span class="breadcrumb-current">Privacy Settings</span></div></div>
+        <div class="topbar-right"><button class="btn btn-primary btn-sm">Save Changes</button></div>
+      </div>
+      <div class="page-content">
+        <div class="page-header"><h1 class="page-title">Privacy Settings</h1><p class="page-sub">Control exactly what information is visible when someone scans your QR code</p></div>
+
+        <div style="max-width:720px;">
+          <div style="padding:16px 20px;background:linear-gradient(135deg,#ecfdf5,#f0fdf4);border-radius:12px;border:1px solid #a7f3d0;margin-bottom:24px;display:flex;gap:12px;align-items:center;">
+            <span style="font-size:20px;">🛡️</span>
+            <div><div style="font-size:13px;font-weight:700;color:#065f46;">Privacy Protected</div><div style="font-size:12px;color:#047857;">Your mobile number and email are always hidden by default. Only toggle what you're comfortable sharing.</div></div>
+          </div>
+
+          <div class="privacy-section">
+            <div class="privacy-section-header">
+              <div class="privacy-section-title">📍 Location Information</div>
+              <div class="privacy-section-sub">Control which location details appear on your QR contact page</div>
+            </div>
+            <div class="privacy-row">
+              <div class="privacy-info"><h4>Show Name</h4><p>Display your first name to scanners</p></div>
+              <input type="checkbox" class="toggle" checked />
+            </div>
+            <div class="privacy-row">
+              <div class="privacy-info"><h4>Show Society / Apartment Name</h4><p>Display your housing society name</p></div>
+              <input type="checkbox" class="toggle" checked />
+            </div>
+            <div class="privacy-row">
+              <div class="privacy-info"><h4>Show Building / Tower</h4><p>Display your building number</p></div>
+              <input type="checkbox" class="toggle" />
+            </div>
+            <div class="privacy-row">
+              <div class="privacy-info"><h4>Show City</h4><p>Display your city name</p></div>
+              <input type="checkbox" class="toggle" checked />
+            </div>
+            <div class="privacy-row">
+              <div class="privacy-info"><h4>Show State</h4><p>Display your state</p></div>
+              <input type="checkbox" class="toggle" checked />
+            </div>
+          </div>
+
+          <div class="privacy-section">
+            <div class="privacy-section-header">
+              <div class="privacy-section-title">🔒 Always Hidden (Cannot be shown)</div>
+              <div class="privacy-section-sub">These fields are never exposed to anyone scanning your QR</div>
+            </div>
+            <div class="privacy-row" style="opacity:0.6;">
+              <div class="privacy-info"><h4>Mobile Number</h4><p>Your registered mobile number</p></div>
+              <span class="badge badge-red">🔒 Always Hidden</span>
+            </div>
+            <div class="privacy-row" style="opacity:0.6;">
+              <div class="privacy-info"><h4>Email Address</h4><p>Your registered email address</p></div>
+              <span class="badge badge-red">🔒 Always Hidden</span>
+            </div>
+            <div class="privacy-row" style="opacity:0.6;">
+              <div class="privacy-info"><h4>Full Home Address</h4><p>Your complete home address</p></div>
+              <span class="badge badge-red">🔒 Always Hidden</span>
+            </div>
+          </div>
+
+          <div class="privacy-section">
+            <div class="privacy-section-header">
+              <div class="privacy-section-title">⚙️ Contact Preferences</div>
+              <div class="privacy-section-sub">Manage how people can contact you through SafePark</div>
+            </div>
+            <div class="privacy-row">
+              <div class="privacy-info"><h4>Allow Contact Requests</h4><p>Let scanners send you messages through SafePark</p></div>
+              <input type="checkbox" class="toggle" checked />
+            </div>
+            <div class="privacy-row">
+              <div class="privacy-info"><h4>Allow Emergency Alerts</h4><p>Let scanners mark a situation as emergency</p></div>
+              <input type="checkbox" class="toggle" checked />
+            </div>
+            <div class="privacy-row">
+              <div class="privacy-info"><h4>Anonymous Scanner Mode</h4><p>Allow completely anonymous scans without scanner identity</p></div>
+              <input type="checkbox" class="toggle" checked />
+            </div>
+          </div>
+
+          <div style="display:flex;gap:14px;">
+            <button class="btn btn-primary" style="flex:1;justify-content:center;">Save Privacy Settings</button>
+            <button class="btn btn-secondary">Reset to Default</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
