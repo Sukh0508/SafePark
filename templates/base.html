@@ -9,9 +9,11 @@
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
+  {% if user.is_authenticated %}
   <input type="checkbox" id="nav-toggle" hidden>
   <label for="nav-toggle" class="sidebar-overlay"></label>
   <label for="nav-toggle" class="nav-toggle-btn" aria-label="Toggle menu"></label>
+  {% endif %}
 {% block content %}
 {% endblock %}
     

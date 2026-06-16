@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-nlhbarg!6@b9weg*4*qtzt8wus8!8fs%2blnra=n^e)w2vfq0v
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    "0.0.0.0",
       "127.0.0.1",
     "localhost",
     "safepark-clp8.onrender.com",

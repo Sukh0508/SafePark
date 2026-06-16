@@ -17,17 +17,24 @@
       </div>
       <nav class="sidebar-nav">
         <div class="nav-section-label">Main</div>
-       <a href="{% url 'dashboard' %}" style="text-decoration: none;" > <button class="nav-item active"><span class="nav-icon">📊</span> Dashboard</button></a>
-       <a href="/vehicle" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">🚗</span> My Vehicles</button></a>
-       <a href="{% url 'qr_create' %}" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">📱</span> Generate QR</button></a>
-       <a href="{% url 'scan_history'%}" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">📋</span> Scan History</button></a>
+        <a href="{% url 'dashboard' %}" style="text-decoration: none;"> <button class="nav-item active"><span
+              class="nav-icon">📊</span> Dashboard</button></a>
+        <a href="/vehicle" style="text-decoration: none;"><button class="nav-item"><span class="nav-icon">🚗</span> My
+            Vehicles</button></a>
+        <a href="{% url 'qr_create' %}" style="text-decoration: none;"><button class="nav-item"><span
+              class="nav-icon">📱</span> Generate QR</button></a>
+        <a href="{% url 'scan_history'%}" style="text-decoration: none;"><button class="nav-item"><span
+              class="nav-icon">📋</span> Scan History</button></a>
         <div class="nav-section-label">Account</div>
-       <a href="{% url 'notification' %}" style="text-decoration: none;"><button class="nav-item"><span class="nav-icon">🔔</span> Notifications <span class="nav-badge">{{ notification_count }}</span></button></a>
-        
-        <a href="/profile" style="text-decoration: none;"><button class="nav-item"><span class="nav-icon">👤</span> Profile</button></a>
+        <a href="{% url 'notification' %}" style="text-decoration: none;"><button class="nav-item"><span
+              class="nav-icon">🔔</span> Notifications <span class="nav-badge">{{ notification_count }}</span></button></a>
+
+        <a href="/profile" style="text-decoration: none;"><button class="nav-item"><span class="nav-icon">👤</span>
+            Profile</button></a>
         <div class="nav-section-label">System</div>
-       
-      <a href="{% url 'logout' %}" style="text-decoration: none;"><button class="nav-item" ><span class="nav-icon">🚪</span> Logout</button></a>
+
+        <a href="{% url 'logout' %}" style="text-decoration: none;"><button class="nav-item"><span
+              class="nav-icon">🚪</span> Logout</button></a>
       </nav>
       <div class="sidebar-footer">
         <div class="sidebar-user">
@@ -52,14 +59,13 @@
           </div>
         </div>
         <div class="topbar-right">
-          <!-- <div class="topbar-search">
-            <span>🔍</span>
-            <input placeholder="Search vehicles, scans..." />
-          </div> -->
-          <a href="{% url 'notification' %}"><div class="icon-btn">
-            🔔
-            <div class="notif-dot">{{ notification_count }}</div>
-          </div></a>
+
+          <a href="{% url 'notification' %}">
+            <div class="icon-btn">
+              🔔
+              <div class="notif-dot">{{ notification_count }}</div>
+            </div>
+          </a>
           <div class="icon-btn">❓</div>
           <div class="sidebar-avatar" style="width:38px;height:38px;border-radius:10px;cursor:pointer;">🅿️</div>
         </div>
@@ -72,7 +78,7 @@
               <h1 class="page-title"> {{ request.user.first_name }} 👋</h1>
               <p class="page-sub">Here's what's happening with your vehicles today.</p>
             </div>
-            <a href="/add_vehicle"><button class="btn btn-primary btn-sm" >+ Add Vehicle</button></a>
+            <a href="/add_vehicle"><button class="btn btn-primary btn-sm">+ Add Vehicle</button></a>
           </div>
         </div>
 
@@ -117,16 +123,27 @@
           <div class="table-wrap">
             <div class="table-header">
               <div class="table-title">Recent Scan Activity</div>
-              <a href="{% url 'notification' %}" style="text-decoration: none;"><button class="btn btn-secondary btn-sm" >View All</button></a>
+              <a href="{% url 'notification' %}" style="text-decoration: none;"><button
+                  class="btn btn-secondary btn-sm">View All</button></a>
             </div>
             <div class="table-responsive table-fit">
               <table>
-                <thead><tr><th>Type</th><th>Date & Time</th></tr></thead>
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Date & Time</th>
+                  </tr>
+                </thead>
                 <tbody>
                   {% for notification in notifications %}
                   <tr>
-                    <td><div class="vehicle-num">{{ notification.title }}</div><div style="font-size:12px;color:var(--text-muted)">{{ notification.message }}</div></td>
-                    <td><div style="font-size:13px;">{{ notification.created_at }}</div></td>
+                    <td>
+                      <div class="vehicle-num">{{ notification.title }}</div>
+                      <div style="font-size:12px;color:var(--text-muted)">{{ notification.message }}</div>
+                    </td>
+                    <td>
+                      <div style="font-size:13px;">{{ notification.created_at }}</div>
+                    </td>
                   </tr>
                   {% empty %}
                   <tr>
@@ -144,9 +161,12 @@
             <div class="card" style="padding:20px;">
               <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:16px;">⚡ Quick Actions</div>
               <div style="display:flex;flex-direction:column;gap:8px;">
-                <a href="/add_vehicle"><button class="btn btn-primary btn-sm" style="justify-content:center;width:100%;">+ Add New Vehicle</button></a>
-                <a href="{% url 'qr_create' %}"><button class="btn btn-secondary btn-sm" style="justify-content:center;width:100%;">📱 Manage QR Codes</button></a>
-                <a href="{% url 'notification' %}"><button class="btn btn-secondary btn-sm" style="justify-content:center;width:100%;">🔔 View Notifications</button></a>
+                <a href="/add_vehicle"><button class="btn btn-primary btn-sm"
+                    style="justify-content:center;width:100%;">+ Add New Vehicle</button></a>
+                <a href="{% url 'qr_create' %}"><button class="btn btn-secondary btn-sm"
+                    style="justify-content:center;width:100%;">📱 Manage QR Codes</button></a>
+                <a href="{% url 'notification' %}"><button class="btn btn-secondary btn-sm"
+                    style="justify-content:center;width:100%;">🔔 View Notifications</button></a>
               </div>
             </div>
             <!-- <div class="card" style="padding:20px;">
