@@ -43,10 +43,7 @@
 
     <!-- MAIN CONTENT -->
     <div class="main-content">
-   
-
-      <div class="page-content">
-           <div class="topbar">
+      <div class="topbar">
         <div class="topbar-left">
           <div class="topbar-breadcrumb">
             <span style="color:var(--text-muted)">SafePark</span>
@@ -55,14 +52,20 @@
           </div>
         </div>
         <div class="topbar-right">
-          <a href="{% url 'notification' %}" style="text-decoration: none;"><div class="icon-btn">
+          <!-- <div class="topbar-search">
+            <span>🔍</span>
+            <input placeholder="Search vehicles, scans..." />
+          </div> -->
+          <a href="{% url 'notification' %}"><div class="icon-btn">
             🔔
             <div class="notif-dot">{{ notification_count }}</div>
           </div></a>
           <div class="icon-btn">❓</div>
-          <div class="icon-btn">🅿️</div>
+          <div class="sidebar-avatar" style="width:38px;height:38px;border-radius:10px;cursor:pointer;">🅿️</div>
         </div>
       </div>
+
+      <div class="page-content">
         <div class="page-header">
           <div class="page-header-flex">
             <div>

@@ -384,7 +384,7 @@ def download_qr(request,qr_id):
 
     )
     qr.add_data(
-        f"http://192.168.1.14:8000/qr/{vehicle.qr_id}/"
+        f"https://safepark-clp8.onrender.com/qr/{vehicle.qr_id}/"
     )
     qr.make(fit=True)
 
