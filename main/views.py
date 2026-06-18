@@ -431,9 +431,9 @@ def download_qr(request, qr_id):
      
      # Fonts
      try:
-         title_font = ImageFont.truetype("Arial.ttf", 42)
-         subtitle_font = ImageFont.truetype("Arial.ttf", 24)
-         text_font = ImageFont.truetype("Arial.ttf", 22)
+        title_font = ImageFont.load_default()
+        subtitle_font = ImageFont.load_default()
+        text_font = ImageFont.load_default()
      except:
          title_font = ImageFont.load_default()
          subtitle_font = ImageFont.load_default()
