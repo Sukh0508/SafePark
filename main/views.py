@@ -142,12 +142,21 @@ def Vehicle_add(request):
         message=f"Your vehicle {vehicle.vehicle_number} was added .",
         notification_type="add"
         )
+       
     #    print("TYPE =", request.POST.get("type"))
     #    print("POST =", request.POST)
     #    print("Vehicle Saved")
        return redirect("my_vehicle")
+    notifications = Notification.objects.filter(
+    user=request.user,
+    is_read=False
+   ).order_by("-created_at")
 
-    return render(request,"add_vehicle.html")
+    notification_count = notifications.count()
+
+    return render(request,"add_vehicle.html",{
+        "notification_count": notification_count
+    })
 
 @login_required
 def Complete_Profile(request):

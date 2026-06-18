@@ -9,19 +9,37 @@
   <div class="dashboard-layout">
     <div class="sidebar">
       <div class="sidebar-logo"><div class="logo"><div class="logo-icon">🅿️</div><span class="logo-text" style="color:white;">Safe<span>Park</span></span></div></div>
-      <nav class="sidebar-nav">
+        <nav class="sidebar-nav">
         <div class="nav-section-label">Main</div>
-        <button class="nav-item" onclick="showScreen('dashboard')"><span class="nav-icon">📊</span> Dashboard</button>
-        <button class="nav-item active" onclick="showScreen('vehicles')"><span class="nav-icon">🚗</span> My Vehicles</button>
-        <button class="nav-item" onclick="showScreen('qr-management')"><span class="nav-icon">📱</span> Generate QR</button>
-        <button class="nav-item" onclick="showScreen('scan-history')"><span class="nav-icon">📋</span> Scan History</button>
+        <a href="{% url 'dashboard' %}" style="text-decoration: none;"> <button class="nav-item active"><span
+              class="nav-icon">📊</span> Dashboard</button></a>
+        <a href="/vehicle" style="text-decoration: none;"><button class="nav-item"><span class="nav-icon">🚗</span> My
+            Vehicles</button></a>
+        <a href="{% url 'qr_create' %}" style="text-decoration: none;"><button class="nav-item"><span
+              class="nav-icon">📱</span> Generate QR</button></a>
+        <a href="{% url 'scan_history'%}" style="text-decoration: none;"><button class="nav-item"><span
+              class="nav-icon">📋</span> Scan History</button></a>
         <div class="nav-section-label">Account</div>
-        <button class="nav-item" onclick="showScreen('notifications')"><span class="nav-icon">🔔</span> Notifications <span class="nav-badge">3</span></button>
-        <button class="nav-item" onclick="showScreen('privacy')"><span class="nav-icon">🔒</span> Privacy Settings</button>
-        <button class="nav-item" onclick="showScreen('profile')"><span class="nav-icon">👤</span> Profile</button>
-        <button class="nav-item" onclick="showScreen('landing')"><span class="nav-icon">🚪</span> Logout</button>
+        <a href="{% url 'notification' %}" style="text-decoration: none;"><button class="nav-item"><span
+              class="nav-icon">🔔</span> Notifications <span class="nav-badge">{{ notification_count }}</span></button></a>
+
+        <a href="/profile" style="text-decoration: none;"><button class="nav-item"><span class="nav-icon">👤</span>
+            Profile</button></a>
+        <div class="nav-section-label">System</div>
+
+        <a href="{% url 'logout' %}" style="text-decoration: none;"><button class="nav-item"><span
+              class="nav-icon">🚪</span> Logout</button></a>
       </nav>
-      <div class="sidebar-footer"><div class="sidebar-user"><div class="sidebar-avatar">RS</div><div class="sidebar-user-info"><div class="sidebar-user-name">Rahul Sharma</div><div class="sidebar-user-role">Pro Plan</div></div></div></div>
+       <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar">🅿️</div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name">{{ request.user.first_name }}</div>
+            <!-- <div class="sidebar-user-role">Pro Plan · 4 vehicles</div> -->
+          </div>
+          <span style="color:rgba(255,255,255,0.3);font-size:14px;">⚙</span>
+        </div>
+      </div>
     </div>
     <div class="main-content">
       <div class="topbar">
