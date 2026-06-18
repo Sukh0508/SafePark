@@ -18,6 +18,12 @@ class Profile(models.Model):
     emergency_contact_name = models.CharField(max_length=100, blank=True,null= True)
     emergency_conatct_number = models.CharField(max_length=15 ,null=True)
 
+    account_type = models.CharField(
+    max_length=20,
+    blank=True,
+    null=True
+)
+
     # privacy Settings
     show_name = models.BooleanField(default=True ,null=True)
     show_city = models.BooleanField(default=False,null=True)
