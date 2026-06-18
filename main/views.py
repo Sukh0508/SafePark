@@ -11,6 +11,8 @@ from django.db.models import Q
 import qrcode
 from PIL import Image,ImageDraw,ImageFont
 from io import BytesIO
+import os
+from django.conf import settings
 
 # from django.http import HttpResponse
 
@@ -384,183 +386,233 @@ def dismiss_notification(request,notification_id):
 
     return redirect('notification')
 
+
 def download_qr(request, qr_id):
 
+    vehicle = get_object_or_404(
+        Add_vehicle,
+        qr_id=qr_id
+    )
 
-     vehicle = get_object_or_404(
-         Add_vehicle,
-         qr_id=qr_id
-     )
-     
-     if not vehicle.is_qr_generated:
-         vehicle.is_qr_generated = True
-         vehicle.save()
-     
-     # Generate QR
-     qr = qrcode.QRCode(
-         version=1,
-         error_correction=qrcode.constants.ERROR_CORRECT_H,
-         box_size=10,
-         border=4
-     )
-     
-     qr.add_data(
-         f"https://safepark-clp8.onrender.com/qr/{vehicle.qr_id}/"
-     )
-     
-     qr.make(fit=True)
-     
-     qr_img = qr.make_image(
-         fill_color="black",
-         back_color="white"
-     ).convert("RGB")
-     
-     # =========================
-     # CARD SETTINGS
-     # =========================
-     
-     CARD_WIDTH = 550
-     CARD_HEIGHT = 600
-     
-     card = Image.new(
-         "RGB",
-         (CARD_WIDTH, CARD_HEIGHT),
-         "white"
-     )
-     
-     draw = ImageDraw.Draw(card)
-     
-     # Border
-     draw.rounded_rectangle(
-         [(10, 10), (CARD_WIDTH - 10, CARD_HEIGHT - 10)],
-         radius=25,
-         outline="#2563eb",
-         width=5
-     )
-     
-     # Fonts
-     try:
+    if not vehicle.is_qr_generated:
+        vehicle.is_qr_generated = True
+        vehicle.save()
+
+    # Generate QR
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_H,
+        box_size=10,
+        border=4
+    )
+
+    qr.add_data(
+        f"https://safepark-clp8.onrender.com/qr/{vehicle.qr_id}/"
+    )
+
+    qr.make(fit=True)
+
+    qr_img = qr.make_image(
+        fill_color="black",
+        back_color="white"
+    ).convert("RGB")
+
+    # --------------------------
+    # CARD SIZE
+    # --------------------------
+
+    CARD_WIDTH = 550
+    CARD_HEIGHT = 600
+
+    card = Image.new(
+        "RGB",
+        (CARD_WIDTH, CARD_HEIGHT),
+        "white"
+    )
+
+    draw = ImageDraw.Draw(card)
+
+    # --------------------------
+    # BORDER
+    # --------------------------
+
+    draw.rounded_rectangle(
+        [(8, 8), (CARD_WIDTH - 8, CARD_HEIGHT - 8)],
+        radius=25,
+        outline="#2563eb",
+        width=5
+    )
+
+    # --------------------------
+    # FONTS
+    # --------------------------
+
+    font_path = os.path.join(
+        settings.BASE_DIR,
+        "static",
+        "fonts",
+        "Poppins-Bold.ttf"
+    )
+
+    try:
+        title_font = ImageFont.truetype(font_path, 40)
+        subtitle_font = ImageFont.truetype(font_path, 22)
+        vehicle_font = ImageFont.truetype(font_path, 26)
+        small_font = ImageFont.truetype(font_path, 18)
+
+    except:
         title_font = ImageFont.load_default()
         subtitle_font = ImageFont.load_default()
-        text_font = ImageFont.load_default()
-     except:
-         title_font = ImageFont.load_default()
-         subtitle_font = ImageFont.load_default()
-         text_font = ImageFont.load_default()
-     
-     # =========================
-     # HEADER
-     # =========================
-     
-     title = "SafePark"
-     
-     bbox = draw.textbbox((0, 0), title, font=title_font)
-     title_width = bbox[2] - bbox[0]
-     
-     draw.text(
-         ((CARD_WIDTH - title_width) // 2, 25),
-         title,
-         fill="#2563eb",
-         font=title_font
-     )
-     
-     subtitle = "Vehicle Safety QR"
-     
-     bbox = draw.textbbox((0, 0), subtitle, font=subtitle_font)
-     subtitle_width = bbox[2] - bbox[0]
-     
-     draw.text(
-         ((CARD_WIDTH - subtitle_width) // 2, 80),
-         subtitle,
-         fill="black",
-         font=subtitle_font
-     )
-     
-     # =========================
-     # QR
-     # =========================
-     
-     qr_size = 260
-     
-     qr_img = qr_img.resize(
-         (qr_size, qr_size)
-     )
-     
-     qr_x = (CARD_WIDTH - qr_size) // 2
-     
-     card.paste(
-         qr_img,
-         (qr_x, 140)
-     )
-     
-     # =========================
-     # FOOTER
-     # =========================
-     
-     footer = "Scan to Contact Owner"
-     
-     bbox = draw.textbbox((0, 0), footer, font=text_font)
-     footer_width = bbox[2] - bbox[0]
-     
-     draw.text(
-         ((CARD_WIDTH - footer_width) // 2, 430),
-         footer,
-         fill="black",
-         font=text_font
-     )
-     
-     # Vehicle Number
-     
-     vehicle_no = vehicle.vehicle_number.upper()
-     
-     bbox = draw.textbbox(
-         (0, 0),
-         vehicle_no,
-         font=subtitle_font
-     )
-     
-     vehicle_width = bbox[2] - bbox[0]
-     
-     draw.text(
-         ((CARD_WIDTH - vehicle_width) // 2, 480),
-         vehicle_no,
-         fill="#2563eb",
-         font=subtitle_font
-     )
-     
-     # Protected text
-     
-     protected_text = "Protected by SafePark"
-     
-     bbox = draw.textbbox(
-         (0, 0),
-         protected_text,
-         font=text_font
-     )
-     
-     protected_width = bbox[2] - bbox[0]
-     
-     draw.text(
-         ((CARD_WIDTH - protected_width) // 2, 530),
-         protected_text,
-         fill="#64748b",
-         font=text_font
-     )
-     
-     # Download
-     
-     response = HttpResponse(
-         content_type="image/png"
-     )
-     
-     response["Content-Disposition"] = (
-         f'attachment; filename="SafePark-{vehicle.vehicle_number}.png"'
-     )
-     
-     card.save(response, "PNG")
-     
-     return response
-     
+        vehicle_font = ImageFont.load_default()
+        small_font = ImageFont.load_default()
 
+    # --------------------------
+    # HEADER
+    # --------------------------
+
+    title = "SAFEPARK"
+
+    bbox = draw.textbbox(
+        (0, 0),
+        title,
+        font=title_font
+    )
+
+    title_width = bbox[2] - bbox[0]
+
+    draw.text(
+        (
+            (CARD_WIDTH - title_width) // 2,
+            25
+        ),
+        title,
+        fill="#2563eb",
+        font=title_font
+    )
+
+    subtitle = "Vehicle Safety QR"
+
+    bbox = draw.textbbox(
+        (0, 0),
+        subtitle,
+        font=subtitle_font
+    )
+
+    subtitle_width = bbox[2] - bbox[0]
+
+    draw.text(
+        (
+            (CARD_WIDTH - subtitle_width) // 2,
+            75
+        ),
+        subtitle,
+        fill="#64748b",
+        font=subtitle_font
+    )
+
+    # --------------------------
+    # QR
+    # --------------------------
+
+    qr_size = 250
+
+    qr_img = qr_img.resize(
+        (qr_size, qr_size)
+    )
+
+    qr_x = (CARD_WIDTH - qr_size) // 2
+
+    card.paste(
+        qr_img,
+        (qr_x, 130)
+    )
+
+    # --------------------------
+    # SCAN TEXT
+    # --------------------------
+
+    scan_text = "Scan to Contact Owner"
+
+    bbox = draw.textbbox(
+        (0, 0),
+        scan_text,
+        font=subtitle_font
+    )
+
+    scan_width = bbox[2] - bbox[0]
+
+    draw.text(
+        (
+            (CARD_WIDTH - scan_width) // 2,
+            405
+        ),
+        scan_text,
+        fill="#0f172a",
+        font=subtitle_font
+    )
+
+    # --------------------------
+    # VEHICLE NUMBER
+    # --------------------------
+
+    vehicle_no = vehicle.vehicle_number.upper()
+
+    bbox = draw.textbbox(
+        (0, 0),
+        vehicle_no,
+        font=vehicle_font
+    )
+
+    vehicle_width = bbox[2] - bbox[0]
+
+    draw.text(
+        (
+            (CARD_WIDTH - vehicle_width) // 2,
+            450
+        ),
+        vehicle_no,
+        fill="#2563eb",
+        font=vehicle_font
+    )
+
+    # --------------------------
+    # FOOTER
+    # --------------------------
+
+    footer = "Protected by SafePark"
+
+    bbox = draw.textbbox(
+        (0, 0),
+        footer,
+        font=small_font
+    )
+
+    footer_width = bbox[2] - bbox[0]
+
+    draw.text(
+        (
+            (CARD_WIDTH - footer_width) // 2,
+            515
+        ),
+        footer,
+        fill="#94a3b8",
+        font=small_font
+    )
+
+    # --------------------------
+    # DOWNLOAD
+    # --------------------------
+
+    response = HttpResponse(
+        content_type="image/png"
+    )
+
+    response["Content-Disposition"] = (
+        f'attachment; filename="SafePark-{vehicle.vehicle_number}.png"'
+    )
+
+    card.save(response, "PNG")
+
+    return response
 # def password_reset(request):
 #     return render(request,"password_reset.html")
