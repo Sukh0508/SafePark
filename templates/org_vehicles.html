@@ -1,0 +1,131 @@
+{% extends 'organization_base.html' %}
+{% block breadcrumb_extra %}
+<a href="{% url 'society_admin_dashboard' %}" style="color:var(--text-muted);text-decoration:none;">{{ society.name }}</a>
+<span class="breadcrumb-sep">/</span>
+<span class="breadcrumb-current">Vehicles</span>
+{% endblock %}
+{% block page_content %}
+
+        <div class="page-header">
+          <div class="page-header-flex">
+            <div>
+              <h1 class="page-title">Organization Vehicles</h1>
+              <p class="page-sub">All vehicles registered by members of {{ society.name }} — {{ total_vehicles }} total</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <div class="table-header">
+            <div>
+              <div class="table-title">Vehicle Registry</div>
+              <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">{{ total_vehicles }} Total Vehicles</div>
+            </div>
+            <div class="table-actions" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+              <form method="GET" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                <input name="q" value="{{ query }}" placeholder="Search vehicles / owner..." style="min-width:200px;" />
+                <select name="type" style="min-width:140px;">
+                  <option value="">All Types</option>
+                  {% for val, label in vehicle_types %}
+                  <option value="{{ val }}" {% if vehicle_type_filter == val %}selected{% endif %}>{{ label }}</option>
+                  {% endfor %}
+                </select>
+                <button class="btn btn-secondary btn-sm" type="submit">🔍 Filter</button>
+                {% if query or vehicle_type_filter %}
+                <a href="{% url 'organization_vehicles' %}" class="btn btn-ghost btn-sm" style="text-decoration:none;">✕ Clear</a>
+                {% endif %}
+              </form>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Vehicle No.</th>
+                  <th>Owner</th>
+                  <th>Type</th>
+                  <th>Brand &amp; Model</th>
+                  <th>Color</th>
+                  <th>QR Status</th>
+                  <th>Actions</th>
+                  <th>Scans</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for vehicle in page_obj %}
+                <tr>
+                  <td><div class="vehicle-num">{{ vehicle.vehicle_number }}</div></td>
+                  <td>
+                    <div style="font-weight:600;">{{ vehicle.user.first_name|default:"—" }}</div>
+                    <div style="font-size:11px;color:var(--text-muted);">{{ vehicle.user.email }}</div>
+                  </td>
+                  <td><span class="badge badge-blue">{{ vehicle.vehicle_type }}</span></td>
+                  <td>
+                    <div style="font-weight:600;">{{ vehicle.brand }}</div>
+                    <div style="font-size:12px;color:var(--text-muted);">{{ vehicle.model }} &bull; {{ vehicle.year_of_manufacture }}</div>
+                  </td>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <span style="width:14px;height:14px;border-radius:50%;background-color:{{ vehicle.vehicle_color_code }};border:1px solid #ccc;display:inline-block;flex-shrink:0;"></span>
+                      {{ vehicle.vehicle_color_name }}
+                    </div>
+                  </td>
+                  <td>
+                    {% if vehicle.is_qr_generated %}
+                    <div class="qr-status status-active"><div class="qr-dot"></div>Generated</div>
+                    {% else %}
+                    <div class="qr-status" style="color:#92400e;background:#fef3c7;"><div class="qr-dot" style="background:#d97706;"></div>Pending</div>
+                    {% endif %}
+                  </td>
+                  <td>
+                    <div style="display:flex;gap:4px;flex-wrap:wrap;">
+                      {% if vehicle.is_qr_generated %}
+                      <a href="{% url 'download_qr' vehicle.qr_id %}" style="text-decoration:none;">
+                        <button class="btn btn-primary btn-sm" title="Download QR">⬇ QR</button>
+                      </a>
+                      {% endif %}
+                      <a href="{% url 'vehicle_details' vehicle.qr_id %}" style="text-decoration:none;">
+                        <button class="btn btn-secondary btn-sm" title="View Details">👁 Details</button>
+                      </a>
+                      <a href="{% url 'delete_vehicle' vehicle.qr_id %}?next=org"
+                         onclick="return confirm('Delete vehicle {{ vehicle.vehicle_number }}? This action cannot be undone.')"
+                         style="text-decoration:none;">
+                        <button class="btn btn-danger btn-sm" title="Delete Vehicle">🗑</button>
+                      </a>
+                    </div>
+                  </td>
+                  <td style="text-align:center;">
+                    <span class="badge badge-green">{{ vehicle.qr_scan_history_set.count }}</span>
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="8" style="text-align:center;padding:32px;color:var(--text-muted);">
+                    {% if query or vehicle_type_filter %}
+                    No vehicles match your search filters.
+                    {% else %}
+                    No vehicles registered yet. Members can add vehicles from their dashboard.
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination -->
+          {% if page_obj.has_other_pages %}
+          <div style="display:flex;justify-content:center;gap:8px;padding:20px;border-top:1px solid var(--border);">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if vehicle_type_filter %}&type={{ vehicle_type_filter }}{% endif %}" class="btn btn-secondary btn-sm" style="text-decoration:none;">← Prev</a>
+            {% endif %}
+            <span style="padding:6px 14px;font-size:13px;color:var(--text-muted);">
+              Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if vehicle_type_filter %}&type={{ vehicle_type_filter }}{% endif %}" class="btn btn-secondary btn-sm" style="text-decoration:none;">Next →</a>
+            {% endif %}
+          </div>
+          {% endif %}
+{% endblock %}

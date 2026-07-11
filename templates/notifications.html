@@ -1,44 +1,10 @@
-{% extends 'base.html' %}
-
-{% block content %}
-    <!-- ============================================================ -->
-<!-- SCREEN 9: NOTIFICATIONS -->
-<!-- ============================================================ -->
-<div id="screen-notifications" class="screen active">
-  <div class="dashboard-layout">
-    <div class="sidebar">
-      <div class="sidebar-logo"><div class="logo"><div class="logo-icon">🅿️</div><span class="logo-text" style="color:white;">Safe<span>Park</span></span></div></div>
-        <nav class="sidebar-nav">
-        <div class="nav-section-label">Main</div>
-       <a href="{% url 'dashboard' %}" style="text-decoration: none;" > <button class="nav-item active"><span class="nav-icon">📊</span> Dashboard</button></a>
-       <a href="/vehicle" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">🚗</span> My Vehicles</button></a>
-       <a href="{% url 'qr_create' %}" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">📱</span> Generate QR</button></a>
-       <a href="{% url 'scan_history'%}" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">📋</span> Scan History</button></a>
-        <div class="nav-section-label">Account</div>
-       <a href="{% url 'notification' %}" style="text-decoration: none;"><button class="nav-item"><span class="nav-icon">🔔</span> Notifications <span class="nav-badge">{{ notification_count }}</span></button></a>
-        
-        <a href="/profile" style="text-decoration: none;"><button class="nav-item"><span class="nav-icon">👤</span> Profile</button></a>
-        <div class="nav-section-label">System</div>
-       
-      <a href="{% url 'logout' %}" style="text-decoration: none;"><button class="nav-item" ><span class="nav-icon">🚪</span> Logout</button></a>
-      </nav>
-        <div class="sidebar-footer">
-        <div class="sidebar-user">
-          <div class="sidebar-avatar">🅿️</div>
-          <div class="sidebar-user-info">
-            <div class="sidebar-user-name">{{ request.user.first_name }}</div>
-            <!-- <div class="sidebar-user-role">Pro Plan · 4 vehicles</div> -->
-          </div>
-          <span style="color:rgba(255,255,255,0.3);font-size:14px;">⚙</span>
-        </div>
-      </div>
-    </div>
-    <div class="main-content">
-      <div class="topbar">
-        <div class="topbar-left"><div class="topbar-breadcrumb"><span style="color:var(--text-muted)">SafePark</span><span class="breadcrumb-sep">/</span><span class="breadcrumb-current">Notifications</span></div></div>
-        <div class="topbar-right">
-          <a href="{% url 'mark_all_read'%}"><button class="btn btn-ghost btn-sm">Mark all read</button></a>
-        </div>
+{% extends 'dashboard_base.html' %}
+{% block breadcrumb_extra %}
+<span class="breadcrumb-current">Notifications</span>
+{% endblock %}
+{% block page_content %}
+      <div class="topbar-right-actions" style="display: flex; justify-content: flex-end; margin-bottom: 15px;">
+        <a href="{% url 'mark_all_read'%}"><button class="btn btn-ghost btn-sm">Mark all read</button></a>
       </div>
       <div class="page-content">
         <div class="page-header">
@@ -84,10 +50,5 @@
           <span class="badge badge-blue">New</span>
         </div>
         {% endfor %}
-    
-      </div>
-    </div>
-  </div>
-</div>
     
 {% endblock %}

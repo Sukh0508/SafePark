@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div id="screen-dashboard" class="screen active">
+  <div class="dashboard-layout">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo">
+          <div class="logo-icon">🅿️</div>
+          <span class="logo-text" style="color:white;">Safe<span>Park</span></span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Main</div>
+        
+        <a href="{% url 'dashboard' %}" style="text-decoration: none;">
+          <button class="nav-item {% if active_page == 'dashboard' %}active{% endif %}">
+            <span class="nav-icon">📊</span> Dashboard
+          </button>
+        </a>
+        
+        <a href="{% url 'my_vehicle' %}" style="text-decoration: none;">
+          <button class="nav-item {% if active_page == 'my_vehicle' %}active{% endif %}">
+            <span class="nav-icon">🚗</span> My Vehicles
+          </button>
+        </a>
+        
+        <a href="{% url 'qr_create' %}" style="text-decoration: none;">
+          <button class="nav-item {% if active_page == 'qr_create' %}active{% endif %}">
+            <span class="nav-icon">📱</span> Generate QR
+          </button>
+        </a>
+        
+        <a href="{% url 'scan_history'%}" style="text-decoration: none;">
+          <button class="nav-item {% if active_page == 'scan_history' %}active{% endif %}">
+            <span class="nav-icon">📋</span> Scan History
+          </button>
+        </a>
+        
+        {% if request.user.profile.account_type in "society,hospital,corporate,education,commercial" or request.user.managed_societies.exists %}
+        <a href="{% url 'society_admin_dashboard' %}" style="text-decoration: none;">
+          <button class="nav-item">
+            <span class="nav-icon">🏢</span> Org Dashboard
+          </button>
+        </a>
+        {% endif %}
+        
+        <div class="nav-section-label">Account</div>
+        
+        <a href="{% url 'notification' %}" style="text-decoration: none;">
+          <button class="nav-item {% if active_page == 'notification' %}active{% endif %}">
+            <span class="nav-icon">🔔</span> Notifications <span class="nav-badge">{{ notification_count|default:0 }}</span>
+          </button>
+        </a>
+
+        <a href="{% url 'complete_profile' %}" style="text-decoration: none;">
+          <button class="nav-item {% if active_page == 'profile' %}active{% endif %}">
+            <span class="nav-icon">👤</span> Profile
+          </button>
+        </a>
+        
+        <div class="nav-section-label">System</div>
+
+        <a href="{% url 'logout' %}" style="text-decoration: none;">
+          <button class="nav-item">
+            <span class="nav-icon">🚪</span> Logout
+          </button>
+        </a>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar">🅿️</div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name">{{ request.user.first_name }}</div>
+          </div>
+          <span style="color:rgba(255,255,255,0.3);font-size:14px;">⚙</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+      <div class="topbar">
+        <div class="topbar-left">
+          <div class="topbar-breadcrumb">
+            <span style="color:var(--text-muted)">SafePark</span>
+            <span class="breadcrumb-sep">/</span>
+            {% block breadcrumb_extra %}
+            <span class="breadcrumb-current">Dashboard</span>
+            {% endblock %}
+          </div>
+        </div>
+        <div class="topbar-right">
+          <a href="{% url 'notification' %}">
+            <div class="icon-btn">
+              🔔
+              <div class="notif-dot">{{ notification_count|default:0 }}</div>
+            </div>
+          </a>
+          <div class="icon-btn">❓</div>
+          <div class="sidebar-avatar" style="width:38px;height:38px;border-radius:10px;cursor:pointer;">🅿️</div>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <!-- Django Messages -->
+        {% if messages %}
+        <div style="margin-bottom:20px;">
+          {% for message in messages %}
+          <div style="padding:12px;border-radius:8px;margin-bottom:10px;font-size:14px;
+            {% if message.tags == 'error' %}background:#fee2e2;color:#b91c1c;
+            {% elif message.tags == 'success' %}background:#d1fae5;color:#047857;
+            {% else %}background:#e0f2fe;color:#0369a1;{% endif %}">
+            {{ message }}
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+        
+        {% block page_content %}{% endblock %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

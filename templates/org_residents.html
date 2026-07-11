@@ -1,0 +1,161 @@
+{% extends 'organization_base.html' %}
+{% block breadcrumb_extra %}
+<a href="{% url 'society_admin_dashboard' %}" style="color:var(--text-muted);text-decoration:none;">{{ society.name }}</a>
+<span class="breadcrumb-sep">/</span>
+<span class="breadcrumb-current">Members</span>
+{% endblock %}
+{% block page_content %}
+
+        <div class="page-header">
+          <div class="page-header-flex">
+            <div>
+              <h1 class="page-title">Members</h1>
+              <p class="page-sub">All members of {{ society.name }} — {{ total_members }} total</p>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <button onclick="copyInviteLink()" class="btn btn-primary btn-sm" id="invite-copy-btn">
+                🔗 Copy Invite Link
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <div class="table-header">
+            <div>
+              <div class="table-title">Member Registry</div>
+              <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">{{ total_members }} Total Members</div>
+            </div>
+            <div class="table-actions">
+              <form method="GET" style="display:flex;gap:8px;align-items:center;">
+                <input name="q" value="{{ query }}" placeholder="Search members..." style="min-width:220px;" />
+                <button class="btn btn-secondary btn-sm" type="submit">🔍 Search</button>
+                {% if query %}
+                <a href="{% url 'organization_residents' %}" class="btn btn-ghost btn-sm" style="text-decoration:none;">✕ Clear</a>
+                {% endif %}
+              </form>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Member</th>
+                  <th>Email</th>
+                  <th>Mobile</th>
+                  <th>City</th>
+                  <th>Vehicles</th>
+                  <th>Role</th>
+                  <th>Joined</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for member in page_obj %}
+                <tr>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <div class="recent-avatar" style="width:32px;height:32px;border-radius:8px;font-size:13px;background:linear-gradient(135deg,#6366f1,#8b5cf6);">
+                        {{ member.user.first_name|first|upper|default:"?" }}
+                      </div>
+                      <div style="font-weight:600;">{{ member.user.first_name|default:"—" }}</div>
+                    </div>
+                  </td>
+                  <td style="font-size:13px;color:var(--text-muted);">{{ member.user.email }}</td>
+                  <td>{{ member.mobile|default:"—" }}</td>
+                  <td>{{ member.city|default:"—" }}</td>
+                  <td style="text-align:center;">
+                    <span class="badge badge-blue">{{ member.vehicle_count }}</span>
+                  </td>
+                  <td>
+                    {% if member.user == society.admin %}
+                    <span class="badge" style="background:#fef9c3;color:#854d0e;">Admin</span>
+                    {% elif member.account_type == "employee" %}
+                    <span class="badge badge-green">Employee</span>
+                    {% else %}
+                    <span class="badge" style="background:#f0fdf4;color:#166534;">Member</span>
+                    {% endif %}
+                  </td>
+                  <td style="font-size:12px;color:var(--text-muted);">{{ member.user.date_joined|date:"d M Y" }}</td>
+                  <td>
+                    <div style="display:flex;gap:4px;flex-wrap:wrap;">
+                      <a href="{% url 'organization_vehicles' %}?q={{ member.user.first_name|default:member.user.email }}" style="text-decoration:none;">
+                        <button class="btn btn-secondary btn-sm">View Profile</button>
+                      </a>
+                      {% if member.user != society.admin %}
+                      <a href="{% url 'org_remove_member' member.id %}"
+                         onclick="return confirm('Remove {{ member.user.first_name|default:member.user.email }} from the organization?')"
+                         style="text-decoration:none;">
+                        <button class="btn btn-danger btn-sm">Remove</button>
+                      </a>
+                      {% else %}
+                      <span style="font-size:12px;color:var(--text-muted);padding:4px 8px;">Admin</span>
+                      {% endif %}
+                    </div>
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="8" style="text-align:center;padding:32px;color:var(--text-muted);">
+                    {% if query %}
+                    No members found for "{{ query }}"
+                    {% else %}
+                    No members yet. Share the invite link to get started!
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination -->
+          {% if page_obj.has_other_pages %}
+          <div style="display:flex;justify-content:center;gap:8px;padding:20px;border-top:1px solid var(--border);">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}" class="btn btn-secondary btn-sm" style="text-decoration:none;">← Prev</a>
+            {% endif %}
+            <span style="padding:6px 14px;font-size:13px;color:var(--text-muted);">
+              Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}" class="btn btn-secondary btn-sm" style="text-decoration:none;">Next →</a>
+            {% endif %}
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Invite Link Card -->
+        <div class="card" style="padding:20px;margin-top:20px;background:linear-gradient(135deg,#eff6ff,#f5f3ff);">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px;">🔗 Invite New Members</div>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <code id="invite-link-val" style="background:white;border:1px solid #e2e8f0;padding:8px 14px;border-radius:8px;font-size:12px;color:#1e40af;flex:1;min-width:200px;word-break:break-all;">{{ invite_link }}</code>
+            <button onclick="copyInviteLink()" class="btn btn-primary btn-sm" id="copy-btn-2">📋 Copy</button>
+          </div>
+        </div>
+    {% endblock %}
+
+{% block scripts %}
+<script>
+  function copyInviteLink() {
+    // We assume the invite link value is available via context; using fallback logic
+    const link = "{{ invite_link }}";
+    navigator.clipboard.writeText(link).then(function() {
+      const btn = document.getElementById("invite-copy-btn");
+      if (btn) { 
+        btn.innerText = "✅ Copied!"; 
+        setTimeout(() => { btn.innerHTML = "🔗 Copy Invite Link"; }, 2000); 
+      }
+    }).catch(function() {
+      const dummy = document.createElement("input");
+      dummy.value = link;
+      document.body.appendChild(dummy);
+      dummy.select();
+      document.execCommand("copy");
+      document.body.removeChild(dummy);
+      alert("Invite link copied!");
+    });
+  }
+</script>
+{% endblock %}

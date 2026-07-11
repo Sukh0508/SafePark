@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div id="screen-create-society" class="screen active">
+  <div class="dashboard-layout">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo">
+          <div class="logo-icon">🅿️</div>
+          <span class="logo-text" style="color:white;">Safe<span>Park</span></span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Main</div>
+        <a href="{% url 'dashboard' %}" style="text-decoration:none;">
+          <button class="nav-item"><span class="nav-icon">📊</span> Dashboard</button>
+        </a>
+        <a href="{% url 'my_vehicle' %}" style="text-decoration:none;">
+          <button class="nav-item"><span class="nav-icon">🚗</span> My Vehicles</button>
+        </a>
+        <a href="{% url 'qr_create' %}" style="text-decoration:none;">
+          <button class="nav-item"><span class="nav-icon">📱</span> Generate QR</button>
+        </a>
+        <a href="{% url 'scan_history' %}" style="text-decoration:none;">
+          <button class="nav-item"><span class="nav-icon">📋</span> Scan History</button>
+        </a>
+        <div class="nav-section-label">Account</div>
+        <a href="{% url 'notification' %}" style="text-decoration:none;">
+          <button class="nav-item"><span class="nav-icon">🔔</span> Notifications</button>
+        </a>
+        <a href="{% url 'complete_profile' %}" style="text-decoration:none;">
+          <button class="nav-item"><span class="nav-icon">👤</span> Profile</button>
+        </a>
+        <div class="nav-section-label">System</div>
+        <a href="{% url 'logout' %}" style="text-decoration:none;">
+          <button class="nav-item"><span class="nav-icon">🚪</span> Logout</button>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar">🅿️</div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name">{{ request.user.first_name }}</div>
+          </div>
+          <span style="color:rgba(255,255,255,0.3);font-size:14px;">⚙</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+      <div class="topbar">
+        <div class="topbar-left">
+          <div class="topbar-breadcrumb">
+            <span style="color:var(--text-muted)">SafePark</span>
+            <span class="breadcrumb-sep">/</span>
+            <span class="breadcrumb-current">Create Organization</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <a href="{% url 'notification' %}">
+            <div class="icon-btn">🔔<div class="notif-dot"></div></div>
+          </a>
+          <div class="icon-btn">❓</div>
+          <div class="sidebar-avatar" style="width:38px;height:38px;border-radius:10px;cursor:pointer;">🅿️</div>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <div class="page-header">
+          <h1 class="page-title">Create Organization</h1>
+          <p class="page-sub">Set up your organization workspace and invite members to register their vehicles.</p>
+        </div>
+
+        <!-- Django Messages -->
+        {% if messages %}
+        <div style="margin-bottom:20px;">
+          {% for message in messages %}
+          <div style="padding:12px;border-radius:8px;margin-bottom:10px;font-size:14px;
+            {% if message.tags == 'error' %}background:#fee2e2;color:#b91c1c;
+            {% elif message.tags == 'success' %}background:#d1fae5;color:#047857;
+            {% else %}background:#e0f2fe;color:#0369a1;{% endif %}">
+            {{ message }}
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="form-layout-grid">
+          <div class="form-card">
+            <div class="form-card-header">
+              <div style="font-size:16px;font-weight:700;color:var(--navy);">Organization Details</div>
+              <div style="font-size:13px;color:var(--text-muted);margin-top:2px;">
+                You are registering as a
+                <strong>{{ profile.account_type|title }}</strong> organization admin.
+              </div>
+            </div>
+
+            <form action="{% url 'create_society' %}" method="POST">
+              {% csrf_token %}
+              <div class="form-card-body">
+
+                <!-- Organization Name (actual name, not account_type) -->
+                <div class="form-group">
+                  <label>Organization Name <span style="color:red;">*</span></label>
+                  <input type="text" name="name" placeholder="e.g. Sunrise Residency, City Hospital, TechCorp" required />
+                  <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">
+                    Type: {{ profile.account_type|title }}
+                  </div>
+                </div>
+
+                <div class="form-grid-2">
+                  <div class="form-group">
+                    <label>City</label>
+                    <input type="text" name="city" placeholder="e.g. Mumbai" />
+                  </div>
+                  <div class="form-group">
+                    <label>State</label>
+                    <input type="text" name="state" placeholder="e.g. Maharashtra" />
+                  </div>
+                </div>
+
+                <div style="display:flex;gap:14px;margin-top:24px;">
+                  <a href="{% url 'dashboard' %}" class="btn btn-secondary" style="text-decoration:none;padding:10px 20px;">Cancel</a>
+                  <button class="btn btn-primary pulse-glow" type="submit" style="flex:1;justify-content:center;">
+                    🏢 Create Organization →
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <div class="card" style="padding:24px;">
+              <div style="font-size:14px;font-weight:700;margin-bottom:12px;">📋 What You Get</div>
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <div style="display:flex;gap:10px;font-size:13px;"><span style="color:var(--emerald);">✓</span> Organization Admin Dashboard</div>
+                <div style="display:flex;gap:10px;font-size:13px;"><span style="color:var(--emerald);">✓</span> Unique Invite Link for Members</div>
+                <div style="display:flex;gap:10px;font-size:13px;"><span style="color:var(--emerald);">✓</span> Member Management</div>
+                <div style="display:flex;gap:10px;font-size:13px;"><span style="color:var(--emerald);">✓</span> Vehicle Registry</div>
+                <div style="display:flex;gap:10px;font-size:13px;"><span style="color:var(--emerald);">✓</span> QR Scan Reports</div>
+              </div>
+            </div>
+            <div class="card" style="padding:24px;background:linear-gradient(135deg,#eff6ff,#f5f3ff);">
+              <div style="font-size:14px;font-weight:700;margin-bottom:8px;">💡 Next Steps</div>
+              <p style="font-size:13px;color:var(--text-secondary);line-height:1.6;">
+                After creating your organization you'll receive an exclusive invite link. Share it with members so they can register and add their vehicles.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

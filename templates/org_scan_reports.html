@@ -1,0 +1,100 @@
+{% extends 'organization_base.html' %}
+{% block breadcrumb_extra %}
+<a href="{% url 'society_admin_dashboard' %}" style="color:var(--text-muted);text-decoration:none;">{{ society.name }}</a>
+<span class="breadcrumb-sep">/</span>
+<span class="breadcrumb-current">Scan Reports</span>
+{% endblock %}
+{% block page_content %}
+
+        <div class="page-header">
+          <div class="page-header-flex">
+            <div>
+              <h1 class="page-title">Scan Reports</h1>
+              <p class="page-sub">QR scan activity across all vehicles in {{ society.name }} — {{ total_scans }} total scans</p>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <a href="?export=csv{% if query %}&q={{ query }}{% endif %}{% if start_date %}&start_date={{ start_date }}{% endif %}{% if end_date %}&end_date={{ end_date }}{% endif %}" style="text-decoration:none;">
+                <button class="btn btn-secondary btn-sm">📥 Export CSV</button>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <div class="table-header">
+            <div>
+              <div class="table-title">Scan Log</div>
+              <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">{{ total_scans }} Total Scans</div>
+            </div>
+            <div class="table-actions">
+              <form method="GET" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                <input name="q" value="{{ query }}" placeholder="Search vehicle, scanner, purpose..." style="min-width:240px;" />
+                <input type="date" name="start_date" value="{{ start_date }}" style="min-width:130px;" title="From Date" />
+                <span style="color:var(--text-muted);">-</span>
+                <input type="date" name="end_date" value="{{ end_date }}" style="min-width:130px;" title="To Date" />
+                <button class="btn btn-secondary btn-sm" type="submit">🔍 Search</button>
+                {% if query or start_date or end_date %}
+                <a href="{% url 'organization_scan_reports' %}" class="btn btn-ghost btn-sm" style="text-decoration:none;">✕ Clear</a>
+                {% endif %}
+              </form>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Vehicle</th>
+                  <th>Owner</th>
+                  <th>Scanner Name</th>
+                  <th>Scanner Mobile</th>
+                  <th>Purpose</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for scan in page_obj %}
+                <tr>
+                  <td><div class="vehicle-num">{{ scan.vehicle.vehicle_number }}</div></td>
+                  <td>
+                    <div style="font-weight:600;">{{ scan.vehicle.user.first_name|default:"—" }}</div>
+                    <div style="font-size:11px;color:var(--text-muted);">{{ scan.vehicle.user.email }}</div>
+                  </td>
+                  <td><div style="font-weight:600;">{{ scan.scanner_name }}</div></td>
+                  <td>{{ scan.scanner_mobile }}</td>
+                  <td><span class="badge badge-blue">{{ scan.purpose }}</span></td>
+                  <td style="font-size:13px;">{{ scan.scaned_at|date:"d M Y" }}</td>
+                  <td style="font-size:13px;color:var(--text-muted);">{{ scan.scaned_at|time:"h:i A" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="7" style="text-align:center;padding:32px;color:var(--text-muted);">
+                    {% if query %}
+                    No scans found for "{{ query }}"
+                    {% else %}
+                    No QR scans recorded yet.
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination -->
+          {% if page_obj.has_other_pages %}
+          <div style="display:flex;justify-content:center;gap:8px;padding:20px;border-top:1px solid var(--border);">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}" class="btn btn-secondary btn-sm" style="text-decoration:none;">← Prev</a>
+            {% endif %}
+            <span style="padding:6px 14px;font-size:13px;color:var(--text-muted);">
+              Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}" class="btn btn-secondary btn-sm" style="text-decoration:none;">Next →</a>
+            {% endif %}
+          </div>
+          {% endif %}
+        </div>
+{% endblock %}

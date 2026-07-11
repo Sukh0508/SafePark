@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div id="screen-org-admin" class="screen active">
+  <div class="dashboard-layout">
+
+    <!-- ── SIDEBAR ─────────────────────────────────────────────── -->
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo">
+          <div class="logo-icon">🅿️</div>
+          <span class="logo-text" style="color:white;">Safe<span>Park</span></span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Organization</div>
+
+        <a href="{% url 'society_admin_dashboard' %}" style="text-decoration:none;">
+          <button class="nav-item {% if active_page == 'dashboard' %}active{% endif %}">
+            <span class="nav-icon">📊</span> Dashboard
+          </button>
+        </a>
+
+        <a href="{% url 'organization_residents' %}" style="text-decoration:none;">
+          <button class="nav-item {% if active_page == 'residents' %}active{% endif %}">
+            <span class="nav-icon">👥</span> Members
+          </button>
+        </a>
+
+        <a href="{% url 'organization_vehicles' %}" style="text-decoration:none;">
+          <button class="nav-item {% if active_page == 'vehicles' %}active{% endif %}">
+            <span class="nav-icon">🚗</span> Vehicles
+          </button>
+        </a>
+
+        <a href="{% url 'organization_pending' %}" style="text-decoration:none;">
+          <button class="nav-item {% if active_page == 'approvals' %}active{% endif %}">
+            <span class="nav-icon">⏳</span> Pending Approvals
+          </button>
+        </a>
+
+        <a href="{% url 'organization_scan_reports' %}" style="text-decoration:none;">
+          <button class="nav-item {% if active_page == 'reports' %}active{% endif %}">
+            <span class="nav-icon">📋</span> Scan Reports
+          </button>
+        </a>
+
+        <a href="{% url 'organization_settings' %}" style="text-decoration:none;">
+          <button class="nav-item {% if active_page == 'settings' %}active{% endif %}">
+            <span class="nav-icon">⚙️</span> Settings
+          </button>
+        </a>
+
+        <div class="nav-section-label">Account</div>
+
+        <a href="{% url 'logout' %}" style="text-decoration:none;">
+          <button class="nav-item">
+            <span class="nav-icon">🚪</span> Logout
+          </button>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar" style="background:linear-gradient(135deg,#10b981,#059669);color:white;font-weight:bold;">
+            {{ request.user.first_name|first|upper }}
+          </div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name">{{ request.user.first_name }}</div>
+            <div class="sidebar-user-role">{{ society.get_organization_type_display }} Admin</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ── END SIDEBAR ─────────────────────────────────────────── -->
+
+    <!-- ── MAIN CONTENT ────────────────────────────────────────── -->
+    <div class="main-content">
+      <div class="topbar">
+        <div class="topbar-left">
+          <div class="topbar-breadcrumb">
+            <span style="color:var(--text-muted)">SafePark</span>
+            <span class="breadcrumb-sep">/</span>
+            {% block breadcrumb_extra %}
+            <span class="breadcrumb-current">Organization Dashboard</span>
+            {% endblock %}
+          </div>
+        </div>
+        <div class="topbar-right">
+          <!-- Only Org-specific topbar icons -->
+          <div class="icon-btn" style="background:linear-gradient(135deg,#10b981,#059669);color:white;font-weight:bold;">
+            {{ request.user.first_name|first|upper }}
+          </div>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <!-- Django Messages -->
+        {% if messages %}
+        <div style="margin-bottom:20px;">
+          {% for message in messages %}
+          <div style="padding:12px;border-radius:8px;margin-bottom:10px;font-size:14px;
+            {% if message.tags == 'error' %}background:#fee2e2;color:#b91c1c;
+            {% elif message.tags == 'success' %}background:#d1fae5;color:#047857;
+            {% else %}background:#e0f2fe;color:#0369a1;{% endif %}">
+            {{ message }}
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block page_content %}{% endblock %}
+      </div><!-- end page-content -->
+    </div><!-- end main-content -->
+  </div><!-- end dashboard-layout -->
+</div>
+
+{% endblock %}

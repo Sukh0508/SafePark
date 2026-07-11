@@ -19,6 +19,9 @@
               class="nav-icon">📱</span> Generate QR</button></a>
         <a href="{% url 'scan_history'%}" style="text-decoration: none;"><button class="nav-item"><span
               class="nav-icon">📋</span> Scan History</button></a>
+        {% if request.user.profile.account_type and "society" in request.user.profile.account_type|lower %}
+        <a href="{% url 'society_admin_dashboard' %}" style="text-decoration: none;"><button class="nav-item"><span class="nav-icon">🏘</span> Society Dashboard</button></a>
+        {% endif %}
         <div class="nav-section-label">Account</div>
         <a href="{% url 'notification' %}" style="text-decoration: none;"><button class="nav-item"><span
               class="nav-icon">🔔</span> Notifications <span class="nav-badge">{{ notification_count }}</span></button></a>

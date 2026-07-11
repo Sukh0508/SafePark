@@ -1,0 +1,141 @@
+{% extends 'organization_base.html' %}
+{% block breadcrumb_extra %}
+<a href="{% url 'society_admin_dashboard' %}" style="color:var(--text-muted);text-decoration:none;">{{ society.name }}</a>
+<span class="breadcrumb-sep">/</span>
+<span class="breadcrumb-current">Settings</span>
+{% endblock %}
+{% block page_content %}
+
+        <!-- Django Messages -->
+        {% if messages %}
+        <div style="margin-bottom:20px;">
+          {% for message in messages %}
+          <div style="padding:12px;border-radius:8px;margin-bottom:10px;font-size:14px;
+            {% if message.tags == 'error' %}background:#fee2e2;color:#b91c1c;
+            {% elif message.tags == 'success' %}background:#d1fae5;color:#047857;
+            {% else %}background:#e0f2fe;color:#0369a1;{% endif %}">
+            {{ message }}
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="page-header">
+          <h1 class="page-title">Organization Settings</h1>
+          <p class="page-sub">Manage your organization profile, invite link, and advanced options.</p>
+        </div>
+
+        <div class="form-layout-grid">
+          <!-- ── Left: Edit Org Details ─────────────────────────── -->
+          <div class="form-card">
+            <div class="form-card-header">
+              <div style="font-size:16px;font-weight:700;color:var(--navy);">🏢 Organization Details</div>
+              <div style="font-size:13px;color:var(--text-muted);margin-top:2px;">Update your organization information</div>
+            </div>
+            <form method="POST" action="{% url 'organization_settings' %}">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="update" />
+              <div class="form-card-body">
+                <div class="form-group">
+                  <label>Organization Name <span style="color:red;">*</span></label>
+                  <input type="text" name="name" value="{{ society.name }}" placeholder="e.g. Sunrise Residency" required />
+                </div>
+                <div class="form-group">
+                  <label>Organization Type</label>
+                  <select name="organization_type">
+                    {% for val, label in org_types %}
+                    <option value="{{ val }}" {% if society.organization_type == val %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="form-grid-2">
+                  <div class="form-group">
+                    <label>City</label>
+                    <input type="text" name="city" value="{{ society.city|default:'' }}" placeholder="e.g. Mumbai" />
+                  </div>
+                  <div class="form-group">
+                    <label>State</label>
+                    <input type="text" name="state" value="{{ society.state|default:'' }}" placeholder="e.g. Maharashtra" />
+                  </div>
+                </div>
+                <button class="btn btn-primary" type="submit" style="justify-content:center;width:100%;">
+                  💾 Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- ── Right: Invite + Danger Zone ─────────────────────── -->
+          <div style="display:flex;flex-direction:column;gap:20px;">
+
+            <!-- Invite Link Card -->
+            <div class="card" style="padding:24px;">
+              <div style="font-size:15px;font-weight:700;margin-bottom:12px;">🔗 Invite Link</div>
+
+              <div style="margin-bottom:12px;">
+                <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px;">Current Invite Code</div>
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <code style="background:#f1f5f9;padding:8px 14px;border-radius:8px;font-size:15px;font-weight:700;color:#1e40af;letter-spacing:2px;">
+                    {{ society.invite_code }}
+                  </code>
+                </div>
+              </div>
+
+              <div style="margin-bottom:16px;">
+                <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px;">Shareable Invite Link</div>
+                <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                  <code id="invite-link-val" style="background:#f1f5f9;border:1px solid #e2e8f0;padding:8px 12px;border-radius:8px;font-size:12px;color:#1e40af;flex:1;min-width:180px;word-break:break-all;">{{ invite_link }}</code>
+                  <button onclick="copyInviteLink()" class="btn btn-secondary btn-sm" id="copy-btn">📋 Copy</button>
+                </div>
+              </div>
+
+              <!-- Regenerate Code -->
+              <form method="POST" action="{% url 'organization_settings' %}" onsubmit="return confirm('Regenerate invite code? The old link will stop working.')">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="regenerate" />
+                <button class="btn btn-secondary" type="submit" style="width:100%;justify-content:center;">
+                  🔄 Regenerate Invite Code
+                </button>
+              </form>
+            </div>
+
+            <!-- Danger Zone -->
+            <div class="card" style="padding:24px;border:2px solid #fee2e2;background:#fff5f5;">
+              <div style="font-size:15px;font-weight:700;color:#b91c1c;margin-bottom:8px;">⚠️ Danger Zone</div>
+              <p style="font-size:13px;color:#7f1d1d;margin-bottom:16px;line-height:1.5;">
+                Deleting your organization is permanent. All member links will be removed. Vehicles and scan history are preserved for individual users.
+              </p>
+              <form method="POST" action="{% url 'organization_settings' %}" onsubmit="return confirm('DELETE {{ society.name }}? This cannot be undone. All member links will be removed.')">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="delete" />
+                <button class="btn btn-danger" type="submit" style="width:100%;justify-content:center;">
+                  🗑 Delete Organization
+                </button>
+              </form>
+            </div>
+
+          </div>
+        </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function copyInviteLink() {
+  const link = document.getElementById("invite-link-val").innerText.trim();
+  navigator.clipboard.writeText(link).then(function() {
+    const btn = document.getElementById("copy-btn");
+    const orig = btn.innerText;
+    btn.innerText = "✅ Copied!";
+    setTimeout(() => btn.innerText = orig, 2000);
+  }).catch(() => {
+    const dummy = document.createElement("input");
+    dummy.value = link;
+    document.body.appendChild(dummy);
+    dummy.select();
+    document.execCommand("copy");
+    document.body.removeChild(dummy);
+    alert("Invite link copied!");
+  });
+}
+</script>
+{% endblock %}

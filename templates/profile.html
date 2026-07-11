@@ -1,47 +1,8 @@
-{% extends 'base.html' %}
-
-{% block content %}
-    
-    
-
-<!-- ============================================================ -->
-<!-- SCREEN 11: USER PROFILE -->
-<!-- ============================================================ -->
-<div id="screen-profile" class="screen active">
-  <div class="dashboard-layout">
-    <div class="sidebar">
-      <div class="sidebar-logo"><div class="logo"><div class="logo-icon">🅿️</div><span class="logo-text" style="color:white;">Safe<span>Park</span></span></div></div>
-        <nav class="sidebar-nav">
-        <div class="nav-section-label">Main</div>
-       <a href="{% url 'dashboard' %}" style="text-decoration: none;" > <button class="nav-item active"><span class="nav-icon">📊</span> Dashboard</button></a>
-       <a href="/vehicle" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">🚗</span> My Vehicles</button></a>
-       <a href="{% url 'qr_create' %}" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">📱</span> Generate QR</button></a>
-       <a href="{% url 'scan_history'%}" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">📋</span> Scan History</button></a>
-        <div class="nav-section-label">Account</div>
-       <a href="{% url 'notification' %}" style="text-decoration: none;"><button class="nav-item"><span class="nav-icon">🔔</span> Notifications <span class="nav-badge">{{ notification_count }}</span></button></a>
-        
-        <a href="/profile" style="text-decoration: none;"><button class="nav-item"><span class="nav-icon">👤</span> Profile</button></a>
-        <div class="nav-section-label">System</div>
-       
-      <a href="{% url 'logout' %}" style="text-decoration: none;"><button class="nav-item" ><span class="nav-icon">🚪</span> Logout</button></a>
-      </nav>
-        <div class="sidebar-footer">
-        <div class="sidebar-user">
-          <div class="sidebar-avatar">🅿️</div>
-          <div class="sidebar-user-info">
-            <div class="sidebar-user-name">{{ request.user.first_name }}</div>
-            <!-- <div class="sidebar-user-role">Pro Plan · 4 vehicles</div> -->
-          </div>
-          <span style="color:rgba(255,255,255,0.3);font-size:14px;">⚙</span>
-        </div>
-      </div>
-    </div>
-    <div class="main-content">
-      <div class="topbar">
-        <div class="topbar-left"><div class="topbar-breadcrumb"><span style="color:var(--text-muted)">SafePark</span><span class="breadcrumb-sep">/</span><span class="breadcrumb-current">My Profile</span></div></div>
-        <!-- <div class="topbar-right"><button class="btn btn-primary btn-sm">Save Changes</button></div> -->
-      </div>
-      <div class="page-content">
+{% extends 'dashboard_base.html' %}
+{% block breadcrumb_extra %}
+<span class="breadcrumb-current">My Profile</span>
+{% endblock %}
+{% block page_content %}
         <div class="page-header"><h1 class="page-title">My Profile</h1><p class="page-sub">Manage your personal information and account settings</p></div>
         <div class="profile-grid">
           <div>
@@ -51,7 +12,7 @@
               <span class="badge badge-blue" style="margin-bottom:20px;">⭐ Pro Plan</span>
               <div class="divider"></div>
               <div class="profile-info-item"><span class="profile-info-icon">📱</span>{{ profile.mobile }}</div>
-              <div class="profile-info-item"><span class="profile-info-icon">🏘️</span>{{profile.society_name}}</div>
+              <div class="profile-info-item"><span class="profile-info-icon">🏘️</span>{% if profile.society %}{{ profile.society.name }}{% else %}No society joined{% endif %}</div>
               <div class="profile-info-item"><span class="profile-info-icon">🏠</span>{{ profile.address}}</div>
               <div class="profile-info-item"><span class="profile-info-icon">📍</span>{{profile.state}}</div>
             </div>
@@ -94,6 +55,45 @@
             <div class="form-card">
   <div class="form-card-header">
     <div style="font-size:15px;font-weight:700;color:var(--navy);">
+      🏘️ Society Access
+    </div>
+  </div>
+
+  <div class="form-card-body">
+    {% if is_society_admin %}
+      {% if has_society %}
+        {# Society owner who already created a society #}
+        <p style="margin-bottom:12px;">You manage <strong>{{ profile.society.name }}</strong>.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <a href="{% url 'society_admin_dashboard' %}" class="btn btn-primary" style="display:inline-block;">Open Society Dashboard</a>
+          <a href="{% url 'society_admin_dashboard' %}" class="btn btn-secondary" style="display:inline-block;">Manage Society</a>
+        </div>
+      {% else %}
+        {# Society owner who hasn't created a society yet #}
+        <p style="margin-bottom:12px;color:var(--text-secondary);">You are registered as a Society Owner. Create your society to get started.</p>
+        <a href="{% url 'create_society' %}" class="btn btn-primary" style="display:inline-block;">🏘️ Create Society</a>
+      {% endif %}
+    {% else %}
+      {# Regular user / resident — show Join Society form #}
+      {% if profile.society %}
+        <p style="margin-bottom:12px;">You are currently connected to <strong>{{ profile.society.name }}</strong>.</p>
+      {% else %}
+        <form method="post" action="{% url 'join_society_post' %}">
+          {% csrf_token %}
+          <div class="form-group">
+            <label>Invite Code</label>
+            <input type="text" name="invite_code" placeholder="Enter invite code" />
+          </div>
+          <button class="btn btn-primary" type="submit">Join Society</button>
+        </form>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+
+            <div class="form-card">
+  <div class="form-card-header">
+    <div style="font-size:15px;font-weight:700;color:var(--navy);">
       🔒 Privacy Settings
     </div>
   </div>
@@ -132,6 +132,14 @@
 
     <br><br>
 
+    <label>
+      <input type="checkbox" name="show_society"
+      {% if profile.show_society %}checked{% endif %}>
+      Show Society
+    </label>
+
+    <br><br>
+
     <button class="btn btn-primary" type="submit">
       Save Privacy Settings
     </button>
@@ -153,9 +161,4 @@
             </div> -->
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 {% endblock %}

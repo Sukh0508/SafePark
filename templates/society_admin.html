@@ -1,114 +1,228 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>SafePark – Smart Vehicle QR Contact System</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-</head>
-<body>
-<!-- ============================================================ -->
-<!-- SCREEN 12: SOCIETY ADMIN DASHBOARD -->
-<!-- ============================================================ -->
-<div id="screen-society-admin" class="screen">
-  <div class="dashboard-layout">
-    <div class="sidebar">
-      <div class="sidebar-logo"><div class="logo"><div class="logo-icon">🅿️</div><span class="logo-text" style="color:white;">Safe<span>Park</span></span></div></div>
-      <nav class="sidebar-nav">
-        <div class="nav-section-label">Society Admin</div>
-        <button class="nav-item active"><span class="nav-icon">📊</span> Dashboard</button>
-        <button class="nav-item"><span class="nav-icon">👥</span> Residents</button>
-        <button class="nav-item"><span class="nav-icon">🚗</span> Vehicles</button>
-        <button class="nav-item"><span class="nav-icon">⏳</span> Pending Approvals <span class="nav-badge">8</span></button>
-        <button class="nav-item"><span class="nav-icon">📋</span> Scan Reports</button>
-        <button class="nav-item"><span class="nav-icon">⚙️</span> Society Settings</button>
-        <button class="nav-item" onclick="showScreen('landing')"><span class="nav-icon">🚪</span> Logout</button>
-      </nav>
-      <div class="sidebar-footer"><div class="sidebar-user"><div class="sidebar-avatar" style="background:linear-gradient(135deg,#10b981,#059669);">SA</div><div class="sidebar-user-info"><div class="sidebar-user-name">Sai Gardens Admin</div><div class="sidebar-user-role">Society Administrator</div></div></div></div>
-    </div>
-    <div class="main-content">
-      <div class="topbar">
-        <div class="topbar-left"><div class="topbar-breadcrumb"><span style="color:var(--text-muted)">SafePark</span><span class="breadcrumb-sep">/</span><span class="breadcrumb-current">Society Dashboard</span></div></div>
-        <div class="topbar-right"><div class="icon-btn">🔔<div class="notif-dot"></div></div><div class="icon-btn" style="background:linear-gradient(135deg,#10b981,#059669);color:white;font-weight:bold;">SA</div></div>
-      </div>
-      <div class="page-content">
-        <div class="admin-header-card">
-          <h2>Sai Gardens Society 🏘️</h2>
-          <p>Mumbai, Maharashtra · Society Plan · Active since Jan 2024</p>
-          <div style="display:flex;gap:10px;margin-top:16px;">
-            <span class="badge" style="background:rgba(255,255,255,0.15);color:white;">✓ 120 Residents</span>
-            <span class="badge" style="background:rgba(255,255,255,0.15);color:white;">🚗 248 Vehicles</span>
-            <span class="badge" style="background:rgba(255,255,255,0.15);color:white;">📱 All QR Active</span>
-          </div>
-        </div>
+{% extends 'organization_base.html' %}
+{% block page_content %}
 
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-header"><div class="stat-icon fi-blue">👥</div><span class="stat-change stat-up">↑ +3</span></div>
-            <div class="stat-value">120</div>
-            <div class="stat-label">Total Residents</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-header"><div class="stat-icon fi-indigo">🚗</div><span class="stat-change stat-up">↑ +5</span></div>
-            <div class="stat-value">248</div>
-            <div class="stat-label">Registered Vehicles</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-header"><div class="stat-icon fi-emerald">📊</div><span class="stat-change stat-up">↑ +18%</span></div>
-            <div class="stat-value">3,492</div>
-            <div class="stat-label">Monthly Scans</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-header"><div class="stat-icon fi-orange">⏳</div><span class="stat-change stat-down">8 new</span></div>
-            <div class="stat-value">8</div>
-            <div class="stat-label">Pending Approvals</div>
-          </div>
-        </div>
-
-        <div class="admin-content-grid">
-          <div class="chart-card">
-            <div class="chart-title">Monthly Scans</div>
-            <div class="chart-sub">Last 6 months</div>
-            <div class="bar-chart">
-              <div class="bar-col"><div class="bar" style="height:60%;background:var(--gradient-blue);"></div><div class="bar-label">Jul</div></div>
-              <div class="bar-col"><div class="bar" style="height:75%;background:var(--gradient-blue);"></div><div class="bar-label">Aug</div></div>
-              <div class="bar-col"><div class="bar" style="height:55%;background:var(--gradient-blue);"></div><div class="bar-label">Sep</div></div>
-              <div class="bar-col"><div class="bar" style="height:85%;background:var(--gradient-blue);"></div><div class="bar-label">Oct</div></div>
-              <div class="bar-col"><div class="bar" style="height:70%;background:var(--gradient-blue);"></div><div class="bar-label">Nov</div></div>
-              <div class="bar-col"><div class="bar" style="height:100%;background:linear-gradient(135deg,#10b981,#059669);"></div><div class="bar-label">Dec</div></div>
+        <!-- ── Header Card ─────────────────────────────────────── -->
+        <div class="admin-header-card" style="margin-bottom:28px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;">
+            <div>
+              <h2 style="margin:0 0 4px 0;font-size:22px;">{{ society.name }}</h2>
+              <p style="margin:0;opacity:0.85;font-size:14px;">
+                {{ society.get_organization_type_display }} &bull;
+                {% if society.city %}{{ society.city }},{% endif %}
+                {% if society.state %}{{ society.state }}{% endif %}
+              </p>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                <span style="background:rgba(255,255,255,0.15);color:white;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:600;letter-spacing:1px;" id="invite-code-display">
+                  🔑 {{ society.invite_code }}
+                </span>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <button onclick="copyInviteLink()" style="background:rgba(255,255,255,0.2);color:white;border:1px solid rgba(255,255,255,0.4);padding:6px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;" id="copy-btn">
+                  📋 Copy Invite Link
+                </button>
+                <a href="{% url 'organization_settings' %}" style="text-decoration:none;">
+                  <button style="background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.3);padding:6px 16px;border-radius:8px;cursor:pointer;font-size:13px;">
+                    ⚙️ Settings
+                  </button>
+                </a>
+              </div>
             </div>
           </div>
+        </div>
 
+        <!-- ── Stats Grid ──────────────────────────────────────── -->
+        <div class="stats-grid" style="margin-bottom:28px;">
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon fi-blue">👥</div>
+              <span class="stat-change stat-up">Members</span>
+            </div>
+            <div class="stat-value">{{ total_members }}</div>
+            <div class="stat-label">Total Members</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon fi-indigo">🚗</div>
+              <span class="stat-change stat-up">Registered</span>
+            </div>
+            <div class="stat-value">{{ total_vehicles }}</div>
+            <div class="stat-label">Total Vehicles</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon fi-emerald">📱</div>
+              <span class="stat-change stat-up">Generated</span>
+            </div>
+            <div class="stat-value">{{ total_qr }}</div>
+            <div class="stat-label">QR Codes Active</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon fi-orange">📊</div>
+              <span class="stat-change stat-up">All time</span>
+            </div>
+            <div class="stat-value">{{ total_scans }}</div>
+            <div class="stat-label">QR Scans</div>
+          </div>
+        </div>
+
+        <!-- ── Recent Data Grid ────────────────────────────────── -->
+        <div class="admin-content-grid" style="margin-bottom:28px;">
+
+          <!-- Recent Members -->
           <div class="chart-card">
-            <div class="chart-title">Recent Registrations</div>
-            <div class="chart-sub">New residents this month</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+              <div>
+                <div class="chart-title">Recent Members</div>
+                <div class="chart-sub">Latest to join</div>
+              </div>
+              <a href="{% url 'organization_residents' %}" style="text-decoration:none;">
+                <button class="btn btn-secondary btn-sm">View All</button>
+              </a>
+            </div>
             <div class="recent-list">
+              {% for member in recent_members %}
               <div class="recent-item">
-                <div class="recent-avatar">AK</div>
-                <div class="recent-info"><div class="recent-name">Anil Kumar</div><div class="recent-detail">B-301 · 2 vehicles · Dec 12</div></div>
+                <div class="recent-avatar" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);">
+                  {{ member.user.first_name|first|upper }}
+                </div>
+                <div class="recent-info">
+                  <div class="recent-name">{{ member.user.first_name|default:member.user.email }}</div>
+                  <div class="recent-detail">{{ member.city|default:"No city" }} &bull; {{ member.account_type|default:"member"|title }}</div>
+                </div>
                 <span class="badge badge-green">Active</span>
               </div>
+              {% empty %}
               <div class="recent-item">
-                <div class="recent-avatar" style="background:linear-gradient(135deg,#4f46e5,#7c3aed);">PM</div>
-                <div class="recent-info"><div class="recent-name">Priya Mehta</div><div class="recent-detail">A-102 · 1 vehicle · Dec 10</div></div>
-                <span class="badge badge-green">Active</span>
+                <div class="recent-info">
+                  <div class="recent-name" style="color:var(--text-muted);">No members yet</div>
+                  <div class="recent-detail">Share the invite link to add members</div>
+                </div>
               </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Recent Vehicles -->
+          <div class="chart-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+              <div>
+                <div class="chart-title">Recent Vehicles</div>
+                <div class="chart-sub">Recently added</div>
+              </div>
+              <a href="{% url 'organization_vehicles' %}" style="text-decoration:none;">
+                <button class="btn btn-secondary btn-sm">View All</button>
+              </a>
+            </div>
+            <div class="recent-list">
+              {% for vehicle in recent_vehicles %}
               <div class="recent-item">
-                <div class="recent-avatar" style="background:linear-gradient(135deg,#10b981,#059669);">SJ</div>
-                <div class="recent-info"><div class="recent-name">Suresh Joshi</div><div class="recent-detail">C-404 · 3 vehicles · Dec 8</div></div>
-                <span class="badge badge-yellow">Pending</span>
+                <div class="recent-avatar" style="background:linear-gradient(135deg,#0ea5e9,#2563eb);">
+                  🚗
+                </div>
+                <div class="recent-info">
+                  <div class="recent-name">{{ vehicle.vehicle_number }}</div>
+                  <div class="recent-detail">{{ vehicle.brand }} {{ vehicle.model }} &bull; {{ vehicle.user.first_name }}</div>
+                </div>
+                {% if vehicle.is_qr_generated %}
+                <span class="badge badge-green">QR ✓</span>
+                {% else %}
+                <span class="badge" style="background:#fef3c7;color:#92400e;">Pending</span>
+                {% endif %}
               </div>
+              {% empty %}
               <div class="recent-item">
-                <div class="recent-avatar" style="background:linear-gradient(135deg,#f59e0b,#d97706);">RD</div>
-                <div class="recent-info"><div class="recent-name">Rekha Desai</div><div class="recent-detail">D-206 · 1 vehicle · Dec 7</div></div>
-                <span class="badge badge-yellow">Pending</span>
+                <div class="recent-info">
+                  <div class="recent-name" style="color:var(--text-muted);">No vehicles yet</div>
+                  <div class="recent-detail">Members can add vehicles after joining</div>
+                </div>
               </div>
+              {% endfor %}
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-</body>
-</html>
+
+        <!-- ── Recent Scans ────────────────────────────────────── -->
+        <div class="table-wrap">
+          <div class="table-header">
+            <div>
+              <div class="table-title">Recent QR Scans</div>
+              <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Latest scan activity across all org vehicles</div>
+            </div>
+            <a href="{% url 'organization_scan_reports' %}" style="text-decoration:none;">
+              <button class="btn btn-secondary btn-sm">View All Reports</button>
+            </a>
+          </div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Vehicle</th>
+                  <th>Owner</th>
+                  <th>Scanner</th>
+                  <th>Mobile</th>
+                  <th>Purpose</th>
+                  <th>Date &amp; Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for scan in recent_scans %}
+                <tr>
+                  <td><div class="vehicle-num">{{ scan.vehicle.vehicle_number }}</div></td>
+                  <td>{{ scan.vehicle.user.first_name|default:scan.vehicle.user.email }}</td>
+                  <td><div style="font-weight:600;">{{ scan.scanner_name }}</div></td>
+                  <td>{{ scan.scanner_mobile }}</td>
+                  <td><span class="badge badge-blue">{{ scan.purpose }}</span></td>
+                  <td style="font-size:12px;color:var(--text-muted);">{{ scan.scaned_at|date:"d M Y" }} {{ scan.scaned_at|time:"h:i A" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="6" style="text-align:center;padding:24px;color:var(--text-muted);">
+                    No scan activity yet
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ── Invite Link Card ────────────────────────────────── -->
+        <div class="card" style="padding:24px;margin-top:24px;background:linear-gradient(135deg,#eff6ff,#f5f3ff);">
+          <div style="font-size:15px;font-weight:700;margin-bottom:8px;">🔗 Invite Link</div>
+          <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;line-height:1.6;">
+            Share this link with people you want to add as members. They will automatically join your organization after registration.
+          </p>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <code id="invite-link-val" style="background:white;border:1px solid #e2e8f0;padding:10px 14px;border-radius:8px;font-size:13px;color:#1e40af;flex:1;min-width:200px;word-break:break-all;">{{ invite_link }}</code>
+            <button onclick="copyInviteLink()" class="btn btn-primary btn-sm" style="white-space:nowrap;" id="copy-btn-2">
+              📋 Copy
+            </button>
+          </div>
+        </div>
+
+    {% endblock %}
+
+{% block scripts %}
+<script>
+  function copyInviteLink() {
+    const link = document.getElementById("invite-link-val").innerText;
+    navigator.clipboard.writeText(link).then(function() {
+      const btns = [document.getElementById("copy-btn"), document.getElementById("copy-btn-2")];
+      btns.forEach(b => { if (b) { b.innerText = "✅ Copied!"; setTimeout(() => { b.innerHTML = b.id === "copy-btn" ? "📋 Copy Invite Link" : "📋 Copy"; }, 2000); }});
+    }).catch(function() {
+      // Fallback for older browsers
+      const dummy = document.createElement("input");
+      dummy.value = document.getElementById("invite-link-val").innerText;
+      document.body.appendChild(dummy);
+      dummy.select();
+      document.execCommand("copy");
+      document.body.removeChild(dummy);
+      alert("Invite link copied!");
+    });
+  }
+</script>
+
+{% endblock %}

@@ -3,7 +3,32 @@ from django.contrib.auth.models import User
 import uuid
 
 
-# Create your models here.
+class Society(models.Model):
+    ORGANIZATION_TYPES = [
+    ("society", "Society"),
+    ("hospital", "Hospital"),
+    ("corporate", "Corporate"),
+    ("education", "Educational Campus"),
+    ("commercial", "Commercial Complex"),
+]
+    name = models.CharField(max_length=150)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    state = models.CharField(max_length=100, blank=True, null=True)
+    invite_code = models.CharField(max_length=12, unique=True, blank=True)
+    admin = models.ForeignKey(User, on_delete=models.CASCADE, related_name='managed_societies')
+    created_at = models.DateTimeField(auto_now_add=True)
+    organization_type = models.CharField(
+    max_length=20,
+    choices=ORGANIZATION_TYPES
+)
+
+    def save(self, *args, **kwargs):
+        if not self.invite_code:
+            self.invite_code = uuid.uuid4().hex[:8].upper()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
 
 
 class Profile(models.Model):
@@ -17,6 +42,7 @@ class Profile(models.Model):
 
     emergency_contact_name = models.CharField(max_length=100, blank=True,null= True)
     emergency_conatct_number = models.CharField(max_length=15 ,null=True)
+    society = models.ForeignKey(Society, on_delete=models.SET_NULL, null=True, blank=True, related_name='residents')
 
     account_type = models.CharField(
     max_length=20,
@@ -29,6 +55,7 @@ class Profile(models.Model):
     show_city = models.BooleanField(default=False,null=True)
     show_mobile = models.BooleanField(default=False,null=True)
     show_email = models.BooleanField(default=False,null=True)
+    show_society = models.BooleanField(default=False,null=True)
     
     def __str__(self):
         return self.user.username
@@ -73,6 +100,7 @@ class Qr_scan_history(models.Model):
 
     scanner_name = models.CharField(max_length=100, blank=True)
     scanner_mobile = models.CharField(max_length=20, blank=True)
+    scanner_email = models.EmailField(blank=True, null=True)
     purpose = models.CharField(max_length=100, blank=True)
     scaned_at = models.DateTimeField(auto_now_add=True)
 

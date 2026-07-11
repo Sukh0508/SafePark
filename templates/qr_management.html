@@ -1,43 +1,8 @@
-{% extends 'base.html' %}
-
-{% block content %}
-    <!-- ============================================================ -->
-<!-- SCREEN 7: QR MANAGEMENT -->
-<!-- ============================================================ -->
-<div id="screen-qr-management" class="screen active">
-  <div class="dashboard-layout">
-    <div class="sidebar">
-      <div class="sidebar-logo"><div class="logo"><div class="logo-icon">🅿️</div><span class="logo-text" style="color:white;">Safe<span>Park</span></span></div></div>
-       <nav class="sidebar-nav">
-        <div class="nav-section-label">Main</div>
-       <a href="{% url 'dashboard' %}" style="text-decoration: none;" > <button class="nav-item active"><span class="nav-icon">📊</span> Dashboard</button></a>
-       <a href="/vehicle" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">🚗</span> My Vehicles</button></a>
-       <a href="{% url 'qr_create' %}" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">📱</span> Generate QR</button></a>
-       <a href="{% url 'scan_history'%}" style="text-decoration: none;" ><button class="nav-item"><span class="nav-icon">📋</span> Scan History</button></a>
-        <div class="nav-section-label">Account</div>
-       <a href="{% url 'notification' %}" style="text-decoration: none;"><button class="nav-item"><span class="nav-icon">🔔</span> Notifications <span class="nav-badge">{{ notification_count }}</span></button></a>
-        
-        <a href="/profile" style="text-decoration: none;"><button class="nav-item"><span class="nav-icon">👤</span> Profile</button></a>
-        <div class="nav-section-label">System</div>
-       
-      <a href="{% url 'logout' %}" style="text-decoration: none;"><button class="nav-item" ><span class="nav-icon">🚪</span> Logout</button></a>
-      </nav>
-        <div class="sidebar-footer">
-        <div class="sidebar-user">
-          <div class="sidebar-avatar">🅿️</div>
-          <div class="sidebar-user-info">
-            <div class="sidebar-user-name">{{ request.user.first_name }}</div>
-            <!-- <div class="sidebar-user-role">Pro Plan · 4 vehicles</div> -->
-          </div>
-          <span style="color:rgba(255,255,255,0.3);font-size:14px;">⚙</span>
-        </div>
-      </div>
-    </div>
-    <div class="main-content">
-      <div class="topbar">
-        <div class="topbar-left"><div class="topbar-breadcrumb"><span style="color:var(--text-muted)">SafePark</span><span class="breadcrumb-sep">/</span><span class="breadcrumb-current">QR Management</span></div></div>
- <div class="topbar-right"><a href="{% url 'notification' %}" style="text-decoration: none;"><div class="icon-btn">🔔<div class="notif-dot"></div></div></a><div class="icon-btn">❓</div><div class="icon-btn">🅿️</div></div>      </div>
-      <div class="page-content">
+{% extends 'dashboard_base.html' %}
+{% block breadcrumb_extra %}
+<span class="breadcrumb-current">QR Management</span>
+{% endblock %}
+{% block page_content %}
         <div class="page-header"><h1 class="page-title">QR Code Management</h1><p class="page-sub">Download, print, and share your vehicle QR codes</p></div>
 
         <div class="qr-layout-grid">
@@ -133,10 +98,6 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded",function () {
