@@ -66,6 +66,8 @@ def Register(request):
         account_type = request.POST.get("account_type")
 
         if form.is_valid():
+            print("✅ FORM VALID")
+
             password = form.cleaned_data["password"]
             confirm_password = form.cleaned_data["confirm_password"]
 
@@ -88,17 +90,18 @@ def Register(request):
             pending_invite = request.session.pop("pending_invite_code", None)
 
             if pending_invite:
-                # ── Invite Registration ──────────────────────────────────────
-                # account_type = "employee" so they NEVER become org admin
-                organization = get_object_or_404(Society, invite_code=pending_invite)
+                organization = get_object_or_404(
+                    Society,
+                    invite_code=pending_invite
+                )
+
                 Profile.objects.create(
                     user=user,
                     mobile=form.cleaned_data["mobile"],
-                    account_type="employee",   # Fixed: was "individual"
+                    account_type="employee",
                     society=organization,
                 )
             else:
-                # ── Normal Registration ──────────────────────────────────────
                 Profile.objects.create(
                     user=user,
                     mobile=form.cleaned_data["mobile"],
@@ -107,6 +110,11 @@ def Register(request):
 
             return redirect("login")
 
+        else:
+            print("❌ FORM INVALID")
+            print(form.errors)
+            print(request.POST)
+
     else:
         form = Registerform()
 
@@ -114,7 +122,6 @@ def Register(request):
         "form": form,
         "is_invited": "pending_invite_code" in request.session,
     })
-
 
 def Login(request):
     if request.method == "POST":
