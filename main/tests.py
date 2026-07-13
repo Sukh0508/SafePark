@@ -71,7 +71,7 @@ class SocietyFlowTests(TestCase):
         self.admin_profile = Profile.objects.create(
             user=self.admin_user,
             mobile="9999999999",
-            account_type="society hollycity"
+            account_type="society"
         )
         self.resident_user = get_user_model().objects.create_user(
             username="resident_test@example.com",
@@ -164,7 +164,7 @@ class SocietyFlowTests(TestCase):
 
         # 2. Register new resident
         register_data = {
-            "username": "newresident",
+            "full_name": "New Resident",
             "mobile": "7777777777",
             "email": "newresident@example.com",
             "account_type": "individual",

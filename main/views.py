@@ -82,7 +82,7 @@ def Register(request):
             user = form.save(commit=False)
             user.username = form.cleaned_data["email"]
             user.email = form.cleaned_data["email"]
-            user.first_name = form.cleaned_data["username"]
+            user.first_name = form.cleaned_data["full_name"]
             user.set_password(password)
             user.save()
 
